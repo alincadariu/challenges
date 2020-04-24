@@ -1,0 +1,24 @@
+{
+  "name": "challenges",
+  "version": "1.0.0",
+  "description": "A collection of front-end challenges.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ch-1": "parcel ./challenges/1/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alincadariu/challenges.git"
+  },
+  "author": "alin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alincadariu/challenges/issues"
+  },
+  "homepage": "https://github.com/alincadariu/challenges#readme",
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "typescript": "^3.8.3"
+  }
+}
