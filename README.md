@@ -36,7 +36,7 @@ Given the following markup:
 This code should run untill all the loaders reach `100%` 🥱😴🥱:
 ``` javascript
     const loaderElementList = document.querySelectorAll('.progress-loader');
-    const loaderList = loaders.map(element => new Loader(element));
+    const loaderList = loaders.map(element => new ProgressLoader(element));
     const doneLoaderIdxList = [];
 
     const handle = setInterval(() => {
@@ -58,7 +58,7 @@ This code should run untill all the loaders reach `100%` 🥱😴🥱:
 And here's a small layout of our expected API 😎:
 ``` typescript
     // Progress API
-    declare class Progress {
+    declare class ProgressLoader {
         constructor(element: HTMLElement);
         get isDone: boolean;
         get progress(): number;
