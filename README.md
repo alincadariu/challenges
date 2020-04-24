@@ -40,21 +40,25 @@ This code should run untill all the loaders reach `100%` 🥱😴🥱:
  const loaderList = loaderElementList.map(element => new ProgressLoader(element));
  const finishedIdxList = new Set();
 
- const handle = setInterval(() => {
-     if (finishedIdxList.size === loaderList.length) {
-         clearInterval(handle);
-         return;
-     }
+const handle = setInterval(() => {
+    if (finishedIdxList.size === loaderList.length) {
+        clearInterval(handle);
+        return;
+    }
 
-     const randomIdx = Math.floor(Math.random() * loaderList.length);
-     const loader = loaderList[randomIdx];
+    let randomIdx;
+    do {
+        randomIdx = Math.floor(Math.random() * loaderList.length)
+    } while (finishedIdxList.has(randomIdx));
 
-     if (loader.isDone) {
-         finishedIdxList.add(randomIdx);
-     } else {
-         loader.progress += 10;
-     }
- }, 1000 * Math.random());
+    const loader = loaderList[randomIdx];
+
+    if (loader.isDone) {
+        finishedIdxList.add(randomIdx);
+    } else {
+        loader.progress += 10;
+    }
+}, 300 * Math.random());
 ```
 
 And here's a small layout of our expected API 😎:
