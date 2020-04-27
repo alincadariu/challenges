@@ -1,0 +1,16 @@
+{
+    "class": {
+        "required": true,
+        "description": "The class that signals our library that this element is a progress loader."
+    },
+    "data-progress": {
+        "requried": false,
+        "defaultValue": 0,
+        "descriptions": "The data attribue that will hold the current value displayed by the progress bar"
+    },
+    "data-color": {
+       "required": false,
+       "defaultValue": "rgb(46,204,113)",
+       "description": "The color of the progress bar fill"
+    }
+}
