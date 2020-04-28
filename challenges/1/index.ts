@@ -22,4 +22,4 @@ const handle = setInterval(() => {
     } else {
         loader.progress += 10;
     }
-}, 3000 * Math.random());
+}, 100 * Math.random());

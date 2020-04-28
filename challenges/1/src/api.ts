@@ -1,43 +1,43 @@
 // Progress API
+const DEFAULT_COLOR = 'rgb(46, 204, 113)';
+const MAX_WIDTH = 100;
+const DEFAULT_PROGRESS = 0;
+
 class ProgressLoader {
-    
-    element: HTMLElement;
-    progressNumber: number;
-    defaultProgress: number = 0;
-    bar: HTMLElement;
-    color: string;
-    defaultColor: string = 'rgb(46,204,113)';
-    retrievedProgress: number;
-    maxWidth:number = 100;
+    public element: HTMLElement;
+    public bar: HTMLElement;
+    public color: string;
+
+    private _progress: number;
 
     constructor(element: HTMLElement) {
         this.element = element;
-        this.retrievedProgress = parseInt(this.element.getAttribute('data-progress'), 10);
-        this.progressNumber = isNaN(this.retrievedProgress) ? this.defaultProgress: this.retrievedProgress;
+        const progress = parseInt(this.element.getAttribute('data-progress'), 10);
+        this._progress = isNaN(progress) ? DEFAULT_PROGRESS : progress;
         this.color = this.element.getAttribute('data-color');
         this.bar = document.createElement('div');
         this.bar.setAttribute('class', 'bar');
-        this.bar.style.width = `${this.progressNumber}%`; 
-        this.bar.style.backgroundColor = this.color || this.defaultColor;
+        this.bar.style.width = `${this._progress}%`;
+        this.bar.style.backgroundColor = this.color || DEFAULT_COLOR;
         this.element.appendChild(this.bar);
     }
 
     get isDone() {
-        return this.progress === this.maxWidth;
+        return this.progress === MAX_WIDTH;
     }
 
     get progress() {
-        return this.progressNumber;
+        return this._progress;
     }
 
     set progress(value: number) {
-        if(this.progressNumber + value >= this.maxWidth) {
-            this.progressNumber = this.maxWidth;
-            this.bar.style.width = `${this.maxWidth}%`;
+        if (this._progress + value >= MAX_WIDTH) {
+            this._progress = MAX_WIDTH;
+            this.bar.style.width = `${MAX_WIDTH}%`;
         }
         else {
-            this.progressNumber += value;
-            this.bar.style.width = `${this.progressNumber.toString()}%`;
+            this._progress += value;
+            this.bar.style.width = `${this._progress.toString()}%`;
         }
     }
 }
