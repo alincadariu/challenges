@@ -75,4 +75,45 @@ And here's a small layout of our expected API 😎:
 
 Expected visual appearance:
 
-![](resources/challenge-1-mock. png)
+![](resources/challenge-1-mock.png)
+
+## challenge #2
+
+Generate a random Matrice of `columns`/`rows` that contains either a `1` or a `0` (logical map).
+
+eg:
+
+```
+This would be a generated matrice for:
+
+columns = 5
+rows = 6
+
+1-1-0-0-1
+1-0-0-0-0
+0-0-0-0-1
+1-1-0-1-1
+1-1-1-1-1
+0-0-0-0-0
+```
+
+After generating this matrice, we need to render a UI `div` grid which has colored elements inside the positions that contain a `1` and an empty element where we have a `0`.
+
+The color of the elements can be either random or static, depending on preference (it would be nice if random, to have the same color for each generation).
+
+A visual aid for the above example would be:
+
+![](resources/challenge-2-mock.png)
+
+The generation / rendering should happen every 6 seconds.
+
+When you click the colored elements, it's `x` and `y` positions in the matrice should be output to the console like so:
+
+```json
+{ x: 1, y: 2 }
+```
+
+Quick notes:
+    - there should be a class that handles the drawing (eg: `MatriceRenderer`)
+    - there should be a method that generates a random matrice (eg: `generateMatrice`)
+    - there should be a handler that re-renders / redraws for the specified inteval (could be the main app?)
