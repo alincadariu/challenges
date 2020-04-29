@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ch-1": "parcel ./challenges/1/index.html"
+    "ch-1": "parcel ./challenges/1/index.html",
+    "ch-2": "parcel ./challenges/2/index.html"
   },
   "repository": {
     "type": "git",
