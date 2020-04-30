@@ -40,25 +40,25 @@ This code should run untill all the loaders reach `100%` 🥱😴🥱:
  const loaderList = loaderElementList.map(element => new ProgressLoader(element));
  const finishedIdxList = new Set();
 
-const handle = setInterval(() => {
-    if (finishedIdxList.size === loaderList.length) {
-        clearInterval(handle);
-        return;
-    }
+ const handle = setInterval(() => {
+     if (finishedIdxList.size === loaderList.length) {
+         clearInterval(handle);
+         return;
+     }
 
-    let randomIdx;
-    do {
-        randomIdx = Math.floor(Math.random() * loaderList.length)
-    } while (finishedIdxList.has(randomIdx));
+     let randomIdx;
+     do {
+         randomIdx = Math.floor(Math.random() * loaderList.length)
+     } while (finishedIdxList.has(randomIdx));
 
-    const loader = loaderList[randomIdx];
+     const loader = loaderList[randomIdx];
 
-    if (loader.isDone) {
-        finishedIdxList.add(randomIdx);
-    } else {
-        loader.progress += 10;
-    }
-}, 300 * Math.random());
+     if (loader.isDone) {
+         finishedIdxList.add(randomIdx);
+     } else {
+         loader.progress += 10;
+     }
+ }, 300 * Math.random());
 ```
 
 And here's a small layout of our expected API 😎:
@@ -79,7 +79,7 @@ Expected visual appearance:
 
 ## challenge #2
 
-Generate a random Matrice of `columns`/`rows` that contains either a `1` or a `0` (logical map).
+Generate a random Matrice of `columns` / `rows` that contains either a `1` or a `0` (logical map).
 
 eg:
 
@@ -97,7 +97,7 @@ rows = 6
 0-0-0-0-0
 ```
 
-After generating this matrice, we need to render a UI `div` grid which has colored elements inside the positions that contain a `1` and an empty element where we have a `0`.
+After generating this matrice, we need to render a UI `div` grid which has colored elements inside the positions that contain a `1` and an empty element where we have a `0` .
 
 The color of the elements can be either random or static, depending on preference (it would be nice if random, to have the same color for each generation).
 
@@ -109,11 +109,46 @@ The generation / rendering should happen every 6 seconds.
 
 When you click the colored elements, it's `x` and `y` positions in the matrice should be output to the console like so:
 
-```json
+``` json
 { x: 1, y: 2 }
 ```
 
 Quick notes:
-    - there should be a class that handles the drawing (eg: `MatriceRenderer`)
-    - there should be a method that generates a random matrice (eg: `generateMatrice`)
+
+    - there should be a class that handles the drawing (eg: `MatriceRenderer` )
+    - there should be a method that generates a random matrice (eg: `generateMatrice` )
     - there should be a handler that re-renders / redraws for the specified inteval (could be the main app?)
+
+# challenge #3
+
+## 3a
+
+Implement challenge #1 using `canvas` .
+
+## 3b
+
+Implement challenge #2 using `canvas` .
+
+I recommend the constructor options definition to be something like this:
+
+``` ts
+interface MatrixClickEvent {
+    column: number;
+    row: number;
+}
+
+interface MatrixOptions {
+    color: string;
+    matrix: number[][];
+    onClick: (ev: MatrixClickEvent) => void;
+}
+
+class Matrix {
+    // destructure object
+    constructor({
+        color,
+        matrix,
+        onClick,
+    }: MatrixOptions) {}
+}
+```
