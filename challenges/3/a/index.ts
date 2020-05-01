@@ -1,6 +1,6 @@
-import ProgressLoader from './src/api';
+import { ProgressLoader } from './src/api';
 
-const loaderElementList = Array.from(document.querySelectorAll<HTMLElement>('.progress-loader'));
+const loaderElementList = Array.from(document.querySelectorAll<HTMLCanvasElement>('.progress-loader'));
 const loaderList = loaderElementList.map(element => new ProgressLoader(element));
 const finishedIdxList = new Set();
 
@@ -22,4 +22,4 @@ const handle = setInterval(() => {
     } else {
         loader.progress += 10;
     }
-}, 3000 * Math.random());
+}, 300 * Math.random());
