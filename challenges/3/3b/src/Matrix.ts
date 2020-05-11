@@ -20,6 +20,7 @@ interface MatrixOptions {
 export class Matrix {
 
     public readonly matrixContainer: HTMLDivElement;
+    private _canv: HTMLCanvasElement;
 
     // destructure object
     constructor({
@@ -30,22 +31,24 @@ export class Matrix {
         this.matrixContainer = document.createElement('div');
         this.matrixContainer.setAttribute('style', MATRIX_CONTAINER_STYLE);
         const rowLength = matrix[0].length;
+        const colLength = matrix.length;
         this.matrixContainer.style.setProperty('max-width', `${CELL_SIZE * rowLength}px`);
-
+        this._canv = document.createElement('canvas');
+        this._canv.width = CELL_SIZE * rowLength;
+        this._canv.height = CELL_SIZE * colLength;
+        this.matrixContainer.append(this._canv);
+        this._canv.addEventListener('click', (ev) => {
+            onClick({
+                row: Math.floor((ev.clientY - 7) / CELL_SIZE),
+                column: Math.floor((ev.clientX - 7) / CELL_SIZE)
+            });
+        });
         matrix.forEach((row, rowIndex) => {
             row.forEach((column, columnIndex) => {
-                const canv = document.createElement('canvas');
-                canv.width = CELL_SIZE;
-                canv.height = CELL_SIZE;
-                canv.addEventListener('click', () => onClick({
-                    row: rowIndex,
-                    column: columnIndex
-                }));
-                this.matrixContainer.append(canv);
-                const canvContext = canv.getContext('2d');
-                canvContext.clearRect(0, 0, canv.height, canv.width);
+                const canvContext = this._canv.getContext('2d');
+                canvContext.clearRect(rowIndex * CELL_SIZE, columnIndex * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 canvContext.fillStyle = !!column ? color : 'white';
-                canvContext.fillRect(0, 0, canv.height, canv.width);
+                canvContext.fillRect(rowIndex * CELL_SIZE, columnIndex * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 canvContext.stroke();
             });
         });

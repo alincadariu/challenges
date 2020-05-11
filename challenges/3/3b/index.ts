@@ -9,7 +9,7 @@ function draw() {
     ROWS = Math.floor(Math.random() * 30 + 1);
     const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
     const matrix = generateMatrix(ROWS, COLUMNS);
-    const onClick = (event: MatrixClickEvent) => { console.log(event); }
+    function onClick(ev: MatrixClickEvent) { console.log(ev); }
     const renderer = new Matrix({
         matrix,
         color,
