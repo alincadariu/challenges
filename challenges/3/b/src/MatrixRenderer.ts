@@ -15,23 +15,19 @@ interface MatrixOptions {
 
 const CELL_SIZE = 50;
 
-type MatrixEventMap = {
-    'cellClick': (ev: CustomEvent<MatrixClickCellMeta>) => void,
-};
+interface MatrixEventMap extends HTMLElementEventMap {
+    'cellClick': CustomEvent<MatrixClickCellMeta>,
+}
 
 type MatrixEvents = keyof MatrixEventMap;
-type CanvasEvents = keyof HTMLElementEventMap;
 
 declare interface MatrixCanvasElement extends HTMLCanvasElement {
     addEventListener<
-        K extends MatrixEvents,
-        T extends CanvasEvents,
+        T extends MatrixEvents,
         >(
-            eventName: K | T,
+            eventName: T,
             handler: (
-                ev: T extends CanvasEvents
-                    ? HTMLElementEventMap[T]
-                    : MatrixEventMap[K]
+                ev: MatrixEventMap[T],
             ) => void,
     );
 }
