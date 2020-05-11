@@ -82,8 +82,9 @@ export class MatrixRenderer {
     }
 
     private _clickEventListener = (ev: MouseEvent) => {
-        const column = Math.floor(ev.clientX / CELL_SIZE);
-        const row = Math.floor(ev.clientY / CELL_SIZE);
+        const { top, left } = this.matrixElement.getBoundingClientRect();
+        const column = Math.floor((ev.clientX - left) / CELL_SIZE);
+        const row = Math.floor((ev.clientY - top) / CELL_SIZE);
 
         const clickCellEvent = new CustomEvent<MatrixClickCellMeta>('cellClick', {
             bubbles: true,

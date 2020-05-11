@@ -20,7 +20,7 @@ const renderer = new MatrixRenderer({
     color,
 });
 
-renderer.matrixElement.addEventListener('cellClick', (ev) => console.log(ev));
+renderer.matrixElement.addEventListener('cellClick', (ev) => console.log(ev.detail));
 
 document.body.appendChild(renderer.matrixElement);
 
