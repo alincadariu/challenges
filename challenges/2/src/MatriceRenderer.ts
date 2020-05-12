@@ -25,11 +25,9 @@ export class MatriceRenderer {
             row.forEach((column, indexCol) => {
                 this._box = document.createElement('div');
                 this._box.setAttribute('style', BOX_STYLE);
-                column === 1 ? this._box.style.setProperty('background-color', color) : this._box.style.setProperty('background-color', 'white');
+                const fill = column === 1 ? color : 'transparent';
+                this._box.style.setProperty('background-color', fill);
                 this._boxWrapper.appendChild(this._box);
-                // this._box.onclick = function(event) {  
-                //     console.log(`x: ${indexCol}, y: ${indexRow}`);
-                // };
                 this._box.dataset['column'] = `${indexCol}`;
                 this._box.dataset['row'] = `${indexRow}`;
             })
