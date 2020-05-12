@@ -1,50 +1,53 @@
-const PROGRESS_LOADER_STYLE = `width: 350px;
+const PROGRESS_LOADER_STYLE = `width: 500px;
 height: 30px;
-background-color: #D3D3D3;
 margin-bottom: 10px;
 border-radius: 25px;`;
 
-const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+function randomInt(min: number, max: number) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+function randomColor() {
+    const r = randomInt(0, 255);
+    const g = randomInt(0, 255);
+    const b = randomInt(0, 255);
+    return `rgb(${r}, ${g}, ${b})`;
+}
 
 export class ProgressLoader {
 
-    private _canvContext: CanvasRenderingContext2D;
-    private _canv: HTMLCanvasElement = document.createElement('canvas');
+    private _context: CanvasRenderingContext2D;
     private _progress: number;
     private _color: string;
 
-    constructor(private _element: HTMLDivElement) {
-        this._element.setAttribute('style', PROGRESS_LOADER_STYLE);
-        this._canv.width = this._element.offsetWidth;
-        this._canv.height = this._element.offsetHeight;
-        this._element.appendChild(this._canv);
-        this._canvContext = this._canv.getContext('2d');
-        this._progress = parseInt(this._element.dataset['progress'], 10) || 0;
-        this._color = this._element.dataset['color'] || randomColor;
-        if (!(this._progress === 0)) this.progress = this._progress;
+    constructor(private _canvas: HTMLCanvasElement) {
+        this._canvas.setAttribute('style', PROGRESS_LOADER_STYLE);
+        this._context = this._canvas.getContext('2d');
+        this._progress = parseInt(this._canvas.dataset['progress'], 10) || 0;
+        this._color = this._canvas.dataset['color'] || randomColor();
+        if (this._progress != null) this.progress = this._progress;
     }
 
     get isDone() {
-        return (this._progress / 100 * this._canv.width) === this._canv.width;
+        return this._progress === 100;
     }
     get progress() {
         return this._progress;
     }
 
     set progress(percent: number) {
-        this._canvContext.clearRect(0, 0, this._canv.width, this._canv.height);
-        this._canvContext.lineWidth = this._canv.height;
-        this._canvContext.lineCap = 'round';
-        this._canvContext.strokeStyle = this._color;
-        this._progress = Math.min(percent, this._canv.width);
-        let progress = this.convertPercent(this._progress);
-        this._canvContext.beginPath();
-        this._canvContext.moveTo(this._canv.height / 2, this._canv.height / 2);
-        this._canvContext.lineTo(progress, this._canv.height / 2);
-        this._canvContext.stroke();
+        this._progress = Math.min(percent, this._canvas.width);
+        this._draw();
     }
 
-    private convertPercent(percent: number) {
-        return (percent / 100) * (this._canv.width - this._canv.height) + this._canv.height / 2;
+    private _draw() {
+        this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        let progress = this._progress * this._canvas.width / 100;
+        this._context.fillStyle = '#d3d3d3';
+        this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+        this._context.fillStyle = this._color;
+        this._context.fillRect(0, 0, progress, this._canvas.height);
     }
 }
