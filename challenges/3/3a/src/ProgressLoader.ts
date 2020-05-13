@@ -1,6 +1,6 @@
 import { randomColor } from '../../helpers';
 
-const PROGRESS_LOADER_STYLE = `width: 100%;
+const PROGRESS_LOADER_STYLE = `width: 40%;
 height: 30px;
 margin-bottom: 10px;
 border-radius: 25px;`;
@@ -17,7 +17,10 @@ export class ProgressLoader {
         this._progress = parseInt(this._canvas.dataset['progress'], 10) || 0;
         this._color = this._canvas.dataset['color'] || randomColor();
         if (this._progress != null) this.progress = this._progress;
-        document.addEventListener('resize', () => {
+
+        window.addEventListener('resize', () => {
+            const { width } = this._canvas.getBoundingClientRect();
+            this._canvas.width = width;
             this.progress = this._progress;
         });
     }
@@ -30,7 +33,8 @@ export class ProgressLoader {
     }
 
     set progress(percent: number) {
-        this._canvas.width = window.innerWidth;
+        // this._canvas.width = window.innerWidth;
+        //console.log(this._canvas.getBoundingClientRect());
         this._progress = Math.min(percent, this._canvas.width);
         this._draw();
     }
