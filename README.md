@@ -152,3 +152,15 @@ class Matrix {
     }: MatrixOptions) {}
 }
 ```
+
+# challenge #4
+
+We need to define a canvas area on which we draw a square:
+ - color is not important
+ - size is not important
+ - the square falls down a bit (can be half the height) every 1-2 seconds
+ - when the square reaches the bottom of the canvas it should stop moving completely
+
+Use the keys W, A, S, D or ArrowUp, ArrowLeft, ArrowDown, ArrowRight to control the position of the square on the canvas.
+
+If the square reaches the right side, it needs to start drawing on the left side (circular infinity) and the same for the left side.
