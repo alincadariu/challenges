@@ -1,4 +1,4 @@
-import { generateMatrice } from './src/generateMatrice';
+import { generateMatrix } from './src/generateMatrice';
 import { MatriceRenderer } from './src/MatriceRenderer';
 
 let COLUMNS: number;
@@ -22,7 +22,7 @@ function render() {
     COLUMNS = Math.floor(Math.random() * 10 + 1);
     ROWS = Math.floor(Math.random() * 30 + 1);
     const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-    const matrice = generateMatrice(ROWS, COLUMNS);
+    const matrice = generateMatrix(ROWS, COLUMNS);
     const renderer = new MatriceRenderer(matrice);
     renderer.render = randomColor;
 
