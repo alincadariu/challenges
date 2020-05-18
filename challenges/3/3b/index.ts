@@ -20,6 +20,6 @@ function draw() {
     document.body.appendChild(renderer.canvasElement);
 }
 draw();
-//const handle = setInterval(draw, 6000);
+const handle = setInterval(draw, 6000);
 
 
