@@ -22,12 +22,12 @@ export class Matrix {
         onClick,
     }: MatrixOptions) {
         this._canvas = document.createElement('canvas');
+        this._context = this._canvas.getContext('2d');
         this._color = color;
 
         const rowLength = matrix[0].length;
         const colLength = matrix.length;
 
-        this._context = this._canvas.getContext('2d');
         const {
             left: marginLeft,
             top: marginTop,
