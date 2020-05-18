@@ -14,6 +14,7 @@ export class Matrix {
     private _canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
     private _color: string;
+
     // destructure object
     constructor({
         color,
@@ -22,43 +23,63 @@ export class Matrix {
     }: MatrixOptions) {
         this._canvas = document.createElement('canvas');
         this._color = color;
+
         const rowLength = matrix[0].length;
         const colLength = matrix.length;
+
         this._context = this._canvas.getContext('2d');
-        CELL_SIZE = window.innerWidth / rowLength;
-        this._update(matrix, rowLength, colLength);
-        const marginLeft = document.body.getBoundingClientRect().left;
-        const marginTop = document.body.getBoundingClientRect().top;
+        const {
+            left: marginLeft,
+            top: marginTop,
+        } = this._canvas.getBoundingClientRect();
+
+        this._canvas.style.setProperty('display', 'block');
+        document.body.style.setProperty('margin', '0px');
+
+        let width = window.innerWidth - marginLeft;
+        let height = window.innerHeight - marginTop;
+
+        this._draw(matrix,
+            rowLength,
+            colLength,
+            width,
+            height,
+        );
+
         this._canvas.addEventListener('click', (ev) => {
             onClick({
                 row: Math.floor((ev.clientY - marginTop) / CELL_SIZE),
                 column: Math.floor((ev.clientX - marginLeft) / CELL_SIZE)
             });
         });
+
         window.addEventListener('resize', () => {
-            this._update(matrix, rowLength, colLength);
-        })
+            width = window.innerWidth - marginLeft;
+            height = window.innerHeight - marginTop;
+            this._draw(matrix,
+                rowLength,
+                colLength,
+                width,
+                height,
+            );
+        });
     }
 
     get canvasElement() {
         return this._canvas;
     }
 
-    private _update(
+    private _draw(
         matrix: number[][],
         rowLength: number,
-        colLength: number
+        colLength: number,
+        width: number,
+        height: number,
     ) {
-        CELL_SIZE = window.innerWidth / rowLength;
-        this._canvas.width = CELL_SIZE * rowLength;
-        this._canvas.height = CELL_SIZE * colLength;
-        this._draw(matrix);
-    }
-
-    private _draw(
-        matrix: number[][]
-    ) {
-        this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        CELL_SIZE = Math.min(height / rowLength, width / colLength);
+        this._canvas.width = CELL_SIZE * colLength;
+        this._canvas.height = CELL_SIZE * rowLength;
+        this._context.clearRect(0, 0, width, height);
         matrix.forEach((row, rowIndex) => this._renderRow(row, rowIndex));
     }
 

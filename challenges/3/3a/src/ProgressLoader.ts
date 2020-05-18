@@ -21,7 +21,7 @@ export class ProgressLoader {
         window.addEventListener('resize', () => {
             const { width } = this._canvas.getBoundingClientRect();
             this._canvas.width = width;
-            this.progress = this._progress;
+            this._draw();
         });
     }
 
@@ -33,9 +33,7 @@ export class ProgressLoader {
     }
 
     set progress(percent: number) {
-        // this._canvas.width = window.innerWidth;
-        //console.log(this._canvas.getBoundingClientRect());
-        this._progress = Math.min(percent, this._canvas.width);
+        this._progress = Math.min(percent, 100);
         this._draw();
     }
 
