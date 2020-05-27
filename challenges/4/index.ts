@@ -11,90 +11,77 @@ canvas.height = 400;
 document.body.style.setProperty('text-align', 'center');
 document.body.append(canvas);
 
-document.addEventListener('keydown', keyPressed);
-document.addEventListener('keyup', keyReleased);
+document.addEventListener('keydown', handleKeyDown);
+document.addEventListener('keyup', handleKeyUp);
 
-const square: Square = {
+const square = new Square({
     position: {
         x: 0,
         y: 0,
     },
     size: 50,
-};
+    canvas,
+});
 
 const squareRenderer = new SquareRenderer(canvas);
 
-const moveUp = () => {
-    square.position.y = square.position.y <= 0 ? 0 : square.position.y -= speed;
-}
-
-const moveLeft = () => {
-    square.position.x = square.position.x <= 0 ? canvas.width - speed : square.position.x -= speed;
-}
-
-const moveRight = () => {
-    square.position.x = square.position.x >= canvas.width - speed ? 0 : square.position.x += speed;
-}
-
-const moveDown = () => {
-    if (square.size + square.position.y >= canvas.height) {
-        square.position.y = canvas.height - square.size;
-    } else {
-        square.position.y += speed;
-    }
-}
-
-const keys = new Array();
+const KEY_STATE_MAP: Record<string, boolean> = {};
 
 function destroyEvents() {
-    document.removeEventListener('keydown', keyPressed);
-    document.removeEventListener('keyup', keyReleased);
+    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener('keyup', handleKeyUp);
 }
 
-function keyPressed(ev: KeyboardEvent) {
+function handleKeyDown(ev: KeyboardEvent) {
+    KEY_STATE_MAP[ev.key] = true;
 
-    keys[ev.key] = true;
+    if (KEY_STATE_MAP['s'] || KEY_STATE_MAP['ArrowDown']) { square.moveDown(speed); }
 
-    if (keys['s'] || keys['ArrowDown']) { moveDown(); }
+    if (KEY_STATE_MAP['w'] || KEY_STATE_MAP['ArrowUp']) { square.moveUp(speed); }
 
-    if (keys['w'] || keys['ArrowUp']) { moveUp(); }
+    if (KEY_STATE_MAP['a'] || KEY_STATE_MAP['ArrowLeft']) { square.moveLeft(speed); }
 
-    if (keys['a'] || keys['ArrowLeft']) { moveLeft(); }
-
-    if (keys['d'] || keys['ArrowRight']) { moveRight(); }
-
+    if (KEY_STATE_MAP['d'] || KEY_STATE_MAP['ArrowRight']) { square.moveRight(speed); }
 }
 
-function keyReleased(ev: KeyboardEvent) {
-    keys[ev.key] = false;
+function handleKeyUp(ev: KeyboardEvent) {
+    KEY_STATE_MAP[ev.key] = false;
 }
-
-const loop = setInterval(() => {
-    square.position.y += 30;
-}, 1000);
 
 let requestId = 0;
-let squareAtBottom = false;
 
 const stopAnimation = () => {
     destroyEvents();
-    clearInterval(loop);
     cancelAnimationFrame(requestId);
 }
 
-function animate() {
+let lastDrawTimestamp = performance.now();
+const FPS = 60;
 
-    squareAtBottom = square.position.y >= canvas.height - square.size;
-    if (!squareAtBottom) {
-        setTimeout(() => {
-            requestId = requestAnimationFrame(animate);
-        }, 1000 / 60);
+function animate() {
+    const elapsed = performance.now() - lastDrawTimestamp;
+
+    // const isAnyKeyPressed = Object
+    //     .values(KEY_STATE_MAP)
+    //     .includes(true);
+
+    // if (elapsed >= 1000 && !isAnyKeyPressed) {
+    //     lastDrawTimestamp = tick;
+    //     square.moveDown(30);
+    // }
+
+    if (!square.isAtBottom) {
+        requestId = requestAnimationFrame(animate);
     }
     else {
-        stopAnimation;
-        square.position.y = canvas.height - square.size;
+        stopAnimation();
+        square.setY(canvas.height - square.size);
     }
-    squareRenderer.update(square);
+
+    if (elapsed >= 1000 / FPS) {
+        lastDrawTimestamp = performance.now();
+        squareRenderer.update(square);
+    }
 }
 
-animate();
+requestAnimationFrame(animate);

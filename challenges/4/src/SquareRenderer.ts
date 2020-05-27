@@ -12,15 +12,15 @@ export class SquareRenderer {
     }
 
     public update(square: Square) {
-        const isAtEdge = square.position.x >= this._canvas.width - square.size && square.position.x <= this._canvas.width;
-        this._draw(square, isAtEdge);
+        this._draw(square);
     }
 
-    private _draw(square: Square, isAtEdge: boolean) {
+    private _draw(square: Square) {
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
         this._context.fillStyle = 'black';
         this._context.fillRect(square.position.x, square.position.y, square.size, square.size);
-        if (isAtEdge) {
+
+        if (square.isAtEdge) {
             this._context.fillRect(
                 square.position.x - this._canvas.width,
                 square.position.y,
@@ -29,5 +29,4 @@ export class SquareRenderer {
             );
         }
     }
-
 }
