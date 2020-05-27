@@ -164,3 +164,29 @@ We need to define a canvas area on which we draw a square:
 Use the keys W, A, S, D or ArrowUp, ArrowLeft, ArrowDown, ArrowRight to control the position of the square on the canvas.
 
 If the square reaches the right side, it needs to start drawing on the left side (circular infinity) and the same for the left side.
+
+# Project - Tetris
+
+The specifications for the game can be found here: https://en.wikipedia.org/wiki/Tetris#Gameplay
+
+We need to extract classes and implement the game using this as a gameplay demo example: https://en.wikipedia.org/wiki/File:Tetris_basic_game.gif (we can make the styling prettier ofc)
+
+## TODO's:
+
+### Menu
+- New Game
+- Pause
+
+### Statistics
+- Lines
+- Time
+
+## Optionals (bonus things):
+
+### Menu
+- High Score
+
+### Statistics
+- Level
+- Score
+- APM
