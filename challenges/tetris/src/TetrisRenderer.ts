@@ -4,8 +4,6 @@ import { Tetrimino } from './Tetrimino';
 import { TETRIMIN_COLOR_MAP } from './TetriminoType';
 import { matrixForEach } from './utils';
 
-
-
 export class TetrisRenderer {
     private _context: CanvasRenderingContext2D;
 
@@ -19,8 +17,8 @@ export class TetrisRenderer {
         this._context.clearRect(0, 0, this._context.canvas.width, this._context.canvas.height);
     }
 
-    public drawBoard(tetris: TetrisBoard) {
-        matrixForEach(tetris.board, (value, valueY, valueX) => {
+    public drawBoard(board: TetrisBoard) {
+        matrixForEach(board.state, (value, valueY, valueX) => {
             if (value === 0) { return; }
 
             const color = TETRIMIN_COLOR_MAP[value];

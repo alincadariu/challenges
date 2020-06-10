@@ -1,12 +1,13 @@
 import { Tetrimino } from './Tetrimino';
 import { TetriminoType } from './TetriminoType';
+import { matrixForEach } from './utils';
 
 export class TetrisBoard {
-    public board: number[][] = [];
+    public state: number[][] = [];
 
     public get isOverlowing() {
         for (let x = 0; x < this.width; x++) {
-            if (this.board[0][x] !== 0) { return true; }
+            if (this.state[0][x] !== 0) { return true; }
         }
 
         return false;
@@ -21,8 +22,24 @@ export class TetrisBoard {
             for (let x = 0; x < this.width; x++) {
                 line.push(0);
             }
-            this.board.push(line);
+            this.state.push(line);
         }
+    }
+
+    public isReadyToAdd(tetrimino: Tetrimino) {
+        let isReady = false;
+        matrixForEach(tetrimino.shape, (value, valueY, valueX) => {
+            const y = tetrimino.y + valueY;
+            const x = tetrimino.x + valueX;
+
+            const lineBelow = this.state[y + 1];
+
+            if (!lineBelow) { return isReady = true; }
+
+            if (value !== 0 && lineBelow[x] !== 0) { return isReady = true; }
+        });
+
+        return isReady;
     }
 
     public addTetrimino(tetrimino: Tetrimino) {
@@ -30,7 +47,7 @@ export class TetrisBoard {
             line.forEach((column, x) => {
                 if (column === 0) { return; }
 
-                this.board[y + tetrimino.y][x + tetrimino.x] = TetriminoType[tetrimino.name];
+                this.state[y + tetrimino.y][x + tetrimino.x] = TetriminoType[tetrimino.name];
             });
         });
     }

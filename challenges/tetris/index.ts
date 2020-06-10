@@ -2,6 +2,7 @@ import { TetrisRenderer } from './src/TetrisRenderer';
 import { TetrisBoard } from './src/TetrisBoard';
 import { CELL_SIZE } from './src/constants';
 import { Tetrimino } from './src/Tetrimino';
+import { GameLoop } from './src/GameLoop';
 
 // TODO: Extract this logic to TetrisEngine
 const BOARD_WIDTH = 20;
@@ -15,8 +16,9 @@ document.body.appendChild(canvas);
 
 let tetrimino = new Tetrimino();
 
-const tetris = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
+const board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
 const renderer = new TetrisRenderer(canvas);
+const loop = new GameLoop();
 
 window.addEventListener('keydown', (ev) => {
     switch (ev.key) {
@@ -24,10 +26,10 @@ window.addEventListener('keydown', (ev) => {
             tetrimino.left(0);
             break;
         case 'ArrowRight':
-            tetrimino.right(tetris.width);
+            tetrimino.right(board.width);
             break;
         case 'ArrowDown':
-            tetrimino.down(tetris.height);
+            tetrimino.down(board.height);
             break;
         case 'ArrowUp':
             tetrimino.rotate();
@@ -36,15 +38,20 @@ window.addEventListener('keydown', (ev) => {
     }
 });
 
-setInterval(() => {
+loop.addPainter(() => {
     renderer.clear();
     renderer.drawTetrimino(tetrimino);
-    renderer.drawBoard(tetris);
-    const isAtBottom = tetrimino.y + tetrimino.height === tetris.height;
+    renderer.drawBoard(board);
 
-    if (isAtBottom) {
-        tetris.addTetrimino(tetrimino);
+    if (board.isReadyToAdd(tetrimino)) {
+        board.addTetrimino(tetrimino);
+        if (board.isOverlowing) {
+            // TODO: GAME OVER 😢
+            loop.stop();
+            return;
+        }
         tetrimino = new Tetrimino();
-        console.log(tetris.board);
     }
-}, 1000 / 60);
+});
+
+loop.start();
