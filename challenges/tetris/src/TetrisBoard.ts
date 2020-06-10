@@ -5,7 +5,7 @@ import { matrixForEach } from './utils';
 export class TetrisBoard {
     public state: number[][] = [];
 
-    public get isOverlowing() {
+    public get isGameOver() {
         for (let x = 0; x < this.width; x++) {
             if (this.state[0][x] !== 0) { return true; }
         }
