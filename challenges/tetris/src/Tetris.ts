@@ -8,6 +8,10 @@ const BOARD_WIDTH = 20;
 const BOARD_HEIGHT = 30;
 
 export class Tetris {
+    public get isPaused() {
+        return this._loop.isStopped;
+    }
+
     private _board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
     private _loop = new GameLoop();
 
@@ -63,6 +67,8 @@ export class Tetris {
     }
 
     private _keyBindings = (ev: KeyboardEvent) => {
+        if (this.isPaused) { return; }
+
         switch (ev.key) {
             case 'ArrowLeft':
                 this._tetrimino.left(0);

@@ -1,4 +1,8 @@
 export class GameLoop {
+    public get isStopped() {
+        return this._stopped;
+    }
+
     private _handle: number;
     private _start: number;
     private _painter = (_: number) => { };
