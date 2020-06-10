@@ -69,17 +69,29 @@ export class Tetris {
     private _keyBindings = (ev: KeyboardEvent) => {
         if (this.isPaused) { return; }
 
+        // FIXME: remove once properly clamping left / right movements 😛
+        const isReadyToAdd = this._board.isReadyToAdd(this._tetrimino);
+
         switch (ev.key) {
             case 'ArrowLeft':
                 this._tetrimino.left(0);
+                // FIXME: do a proper check (eg: determine the correct left limit given the current position)
+                if (!isReadyToAdd && this._board.isReadyToAdd(this._tetrimino)) {
+                    this._tetrimino.right(this._board.width);
+                }
                 break;
             case 'ArrowRight':
                 this._tetrimino.right(this._board.width);
+                // FIXME: do a proper check (eg: determine the correct right limit given the current position)
+                if (!isReadyToAdd && this._board.isReadyToAdd(this._tetrimino)) {
+                    this._tetrimino.left(0);
+                }
                 break;
             case 'ArrowDown':
                 this._tetrimino.down(this._board.height);
                 break;
             case 'ArrowUp':
+                // FIXME: can overflow when at the right extremity, check board when rotating and shift if needed
                 this._tetrimino.rotate();
                 break;
             default: break;
