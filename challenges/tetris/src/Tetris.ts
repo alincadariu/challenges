@@ -27,7 +27,18 @@ export class Tetris {
 
         this._renderer = new TetrisRenderer(canvas);
         window.addEventListener('keydown', this._keyBindings);
-        this._loop.addPainter(this._painter);
+
+        this._loop.addEvent({
+            id: 'painter',
+            fps: 120,
+            action: this._painter,
+        });
+
+        this._loop.addEvent({
+            id: 'stepper',
+            fps: 1,
+            action: this._step,
+        });
     }
 
     public start() {
@@ -64,6 +75,10 @@ export class Tetris {
 
             this._tetrimino = new Tetrimino();
         }
+    }
+
+    private _step = () => {
+        this._tetrimino.down(this._board.height);
     }
 
     private _keyBindings = (ev: KeyboardEvent) => {

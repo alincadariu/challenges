@@ -1,26 +1,36 @@
+export type GameLoopAction = (frame: number) => void;
+
+export type GameLoopEvent = {
+    id: string;
+    fps: number;
+    action: GameLoopAction;
+}
+
 export class GameLoop {
     public get isStopped() {
         return this._stopped;
     }
 
     private _handle: number;
-    private _start: number;
-    private _painter = (_: number) => { };
-    private _stopped = true;
+    private _events = new Map<string, GameLoopEvent>();
+    private _eventStartMap = new Map<string, number>();
+    private _stopped = false;
 
-    constructor(
-        private _fps: 24 | 30 | 60 | 120 | 240 = 240
-    ) { }
+    constructor() { }
 
-    public addPainter(painter: (frame: number) => void) {
-        this._painter = painter;
+    public addEvent(event: GameLoopEvent) {
+        this._events.set(event.id, event);
     }
+
+    public removeEvent(event: GameLoopEvent) {
+        this._events.delete(event.id);
+    };
 
     public start() {
         this._stopped = false;
         this._handle = requestAnimationFrame((start) => {
-            this._start = start;
-            this._draw(start, null);
+            this._events.forEach((_, id) => this._eventStartMap.set(id, start));
+            this._draw(NaN);
         });
     }
 
@@ -28,20 +38,22 @@ export class GameLoop {
         this._stopped = true;
     }
 
-    private _draw(start: number, current: number) {
+    private _draw(current: number) {
         if (this._stopped) {
             cancelAnimationFrame(this._handle);
             return;
         }
 
-        const elapsed = current - start;
+        this._events.forEach(({ fps, action, id }) => {
+            const elapsed = current - this._eventStartMap.get(id);
 
-        if (elapsed > 1000 / this._fps) {
-            const frame = Math.floor((current - this._start) / 1000 * this._fps);
-            this._painter(frame);
-            start = current;
-        }
+            if (elapsed > 1000 / fps) {
+                const frame = Math.floor(elapsed / 1000 * fps);
+                action(frame);
+                this._eventStartMap.set(id, current);
+            }
+        });
 
-        this._handle = requestAnimationFrame((timestamp) => this._draw(start, timestamp));
+        this._handle = requestAnimationFrame((timestamp) => this._draw(timestamp));
     };
 }
