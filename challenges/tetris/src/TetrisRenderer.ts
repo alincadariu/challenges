@@ -1,5 +1,5 @@
 import { TetrisBoard } from './TetrisBoard';
-import { CELL_SIZE } from './constants';
+import { CELL_SIZE, TETRIMINO_PADDING } from './constants';
 import { Tetrimino } from './Tetrimino';
 import { TETRIMIN_COLOR_MAP } from './TetriminoType';
 import { matrixForEach } from './utils';
@@ -27,7 +27,7 @@ export class TetrisRenderer {
             const x = CELL_SIZE * valueX;
             const y = CELL_SIZE * valueY;
 
-            this._context.fillRect(x, y, CELL_SIZE, CELL_SIZE)
+            this._context.fillRect(x, y, CELL_SIZE - TETRIMINO_PADDING, CELL_SIZE - TETRIMINO_PADDING)
         });
     }
 
@@ -42,7 +42,7 @@ export class TetrisRenderer {
             const x = CELL_SIZE * valueX + shiftX;
             const y = CELL_SIZE * valueY + shiftY;
 
-            this._context.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+            this._context.fillRect(x, y, CELL_SIZE - TETRIMINO_PADDING, CELL_SIZE - TETRIMINO_PADDING);
         });
     }
 }
