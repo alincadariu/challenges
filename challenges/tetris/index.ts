@@ -42,8 +42,7 @@ let seconds;
 let requestId;
 let isGameOver;
 let start;
-let distanceToLeft;
-let distanceToRight;
+
 
 canvas.setAttribute('style', CANVAS_STYLE);
 document.body.setAttribute('style', BODY_STYLE);
@@ -104,37 +103,14 @@ function keyReleased(ev: KeyboardEvent) {
     keys[ev.key] = false;
 }
 
-function distanceToLeftEdge(tetrimino) {
-    distanceToLeft = 100;
-    tetrimino.shape.forEach((row) => {
-        row.forEach((value, columnIndex) => {
-            if (value > 0) {
-                distanceToLeft = Math.min(distanceToLeft, columnIndex);
-            }
-        });
-    });
-}
 
-function distanceToRightEdge(tetrimino) {
-    distanceToRight = 0;
-    tetrimino.shape.forEach((row) => {
-        row.forEach((value, columnIndex) => {
-            if (value > 0) {
-                distanceToRight = Math.max(distanceToRight, columnIndex);
-            }
-        });
-    });
-}
 
 function updateMove() {
-
-    distanceToRightEdge(nextState);
-    distanceToLeftEdge(nextState);
 
     if (game.isValid(nextState)) {
         game.tetrimino = nextState;
     }
-    else if (nextState.x + distanceToLeft < 0 || nextState.x + distanceToRight >= 10) {
+    else if (nextState.x + game.tetrimino.distanceLeft < 0 || nextState.x + game.tetrimino.distanceRight >= 10) {
         return;
     }
     else {
