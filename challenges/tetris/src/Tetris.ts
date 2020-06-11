@@ -42,7 +42,6 @@ export class Tetris {
     }
 
     public start() {
-        this._tetrimino = new Tetrimino();
         this.resume();
     }
 
@@ -61,19 +60,23 @@ export class Tetris {
     }
 
     private _painter = () => {
+        if (!this._tetrimino) {
+            this._tetrimino = new Tetrimino();
+            this._tetrimino.x = Math.floor(this._board.width / 2) -
+                Math.floor(this._tetrimino.width / 2);
+        }
+
         this._renderer.clear();
         this._renderer.drawTetrimino(this._tetrimino);
         this._renderer.drawBoard(this._board);
 
         if (this._board.isReadyToAdd(this._tetrimino)) {
             this._board.addTetrimino(this._tetrimino);
-
+            this._tetrimino = null;
             if (this._board.isGameOver) {
                 this._loop.stop();
                 return;
             }
-
-            this._tetrimino = new Tetrimino();
         }
     }
 
