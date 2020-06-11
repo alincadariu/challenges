@@ -2,6 +2,8 @@ import { Tetrimino } from './Tetrimino';
 import { TetriminoType } from './TetriminoType';
 import { matrixForEach } from './utils';
 
+const emptyArray = (count: number) => Array(count).fill(0);
+
 export class TetrisBoard {
     public state: number[][] = [];
 
@@ -17,13 +19,7 @@ export class TetrisBoard {
         public readonly width: number,
         public readonly height: number,
     ) {
-        for (let y = 0; y < this.height; y++) {
-            const line = [];
-            for (let x = 0; x < this.width; x++) {
-                line.push(0);
-            }
-            this.state.push(line);
-        }
+        this.state = Array.from({ length: this.height }, () => emptyArray(this.width));
     }
 
     public isReadyToAdd(tetrimino: Tetrimino) {
@@ -49,6 +45,8 @@ export class TetrisBoard {
                 this.state[y + tetrimino.y][x + tetrimino.x] = TetriminoType[tetrimino.name];
             });
         });
+
+        this._clearFilled();
     }
 
     public isAbleToMoveLeft(tetrimino: Tetrimino) {
@@ -87,9 +85,24 @@ export class TetrisBoard {
 
     public isOverflowingRight(tetrimino: Tetrimino) {
         return tetrimino.x + tetrimino.width > this.width;
-
     }
+
     public isOverflowingLeft(tetrimino: Tetrimino) {
         return tetrimino.x < 0;
+    }
+
+    private _clearFilled() {
+        const filledRowIds = [];
+
+        this.state.forEach((line, y) => {
+            if (line.some(value => !value)) { return; }
+
+            filledRowIds.push(y);
+        });
+
+        filledRowIds.forEach((y) => {
+            this.state.splice(y, 1);
+            this.state.unshift(emptyArray(this.width));
+        });
     }
 }
