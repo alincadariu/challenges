@@ -154,7 +154,7 @@ function play() {
     game.reset();
     seconds = 0;
     game.lines = 0;
-    game.updateLines;
+    game.updateLines();
     isGameOver = false;
     renderer.updateTetrimino(game.tetrimino);
     renderer.drawBoard(game.board, game.tetrimino);
