@@ -102,36 +102,58 @@ export class Tetris {
     private _keyBindings = (ev: KeyboardEvent) => {
         if (this.isPaused) { return; }
 
-        switch (ev.key) {
-            case 'ArrowLeft':
-                if (this._board.isAbleToMoveLeft(this._tetrimino)) {
-                    this._tetrimino.left();
-                }
-                break;
-            case 'ArrowRight':
-                if (this._board.isAbleToMoveRight(this._tetrimino)) {
-                    this._tetrimino.right();
-                }
-                break;
-            case 'ArrowDown':
-                this._tetrimino.down();
-                break;
-            case 'ArrowUp':
-                this._tetrimino.rotate();
-                while (this._board.isOverflowingRight(this._tetrimino)) {
-                    this._tetrimino.left()
-                }
-                break;
-            case ' ':
-                this._loop.pauseEvent(PAINT_EVENT_ID);
-                this._loop.pauseEvent(STEP_EVENT_ID);
-                this._loop.addEvent({
-                    id: DROP_EVENT_ID,
-                    action: this._drop,
-                    fps: 240,
-                });
-
-            default: console.log(ev.key); break;
+        if (['ArrowUp', 'KeyW'].includes(ev.code)) {
+            this._actionUp();
         }
+
+        if (['ArrowLeft', 'KeyA'].includes(ev.code)) {
+            this._actionLeft();
+        }
+
+        if (['ArrowDown', 'KeyS'].includes(ev.code)) {
+            this._actionDown();
+        }
+
+        if (['ArrowRight', 'KeyD'].includes(ev.code)) {
+            this._actionRight();
+        }
+
+        if (['Space'].includes(ev.code)) {
+            this._actionDrop();
+        }
+    }
+
+    private _actionDrop = () => {
+        this._loop.pauseEvent(PAINT_EVENT_ID);
+        this._loop.pauseEvent(STEP_EVENT_ID);
+        this._loop.addEvent({
+            id: DROP_EVENT_ID,
+            action: this._drop,
+            fps: 240,
+        });
+    }
+
+    private _actionDown = () => {
+        this._tetrimino.down();
+    }
+
+    private _actionUp = () => {
+        this._tetrimino.rotate();
+
+        while (this._board.isOverflowingRight(this._tetrimino)) {
+            this._tetrimino.left()
+        }
+    }
+
+    private _actionRight = () => {
+        if (!this._board.isAbleToMoveRight(this._tetrimino)) { return; }
+
+        this._tetrimino.right();
+    }
+
+    private _actionLeft = () => {
+        if (!this._board.isAbleToMoveLeft(this._tetrimino)) { return; }
+
+        this._tetrimino.left();
     }
 }
