@@ -78,7 +78,7 @@ export class Tetris {
         this._renderer.drawTetrimino(this._tetrimino);
         this._renderer.drawBoard(this._board);
 
-        if (this._board.isReadyToAdd(this._tetrimino)) {
+        if (this._board.isAddable(this._tetrimino)) {
             this._board.addTetrimino(this._tetrimino);
             this._tetrimino = null;
         }

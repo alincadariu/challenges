@@ -27,20 +27,21 @@ export class TetrisBoard {
     public onLineClear = (callback: (count: number) => void) =>
         this._onLineCleared = callback;
 
-    public isReadyToAdd(tetrimino: Tetrimino) {
-        let isReady = false;
+    public isAddable(tetrimino: Tetrimino) {
+        let isAddable = false;
+
         matrixForEach(tetrimino.shape, (value, valueY, valueX) => {
             const y = tetrimino.y + valueY;
             const x = tetrimino.x + valueX;
 
             const lineBelow = this.state[y + 1];
 
-            if (!lineBelow) { return isReady = true; }
+            if (!lineBelow) { return isAddable = true; }
 
-            if (value !== 0 && lineBelow[x] !== 0) { return isReady = true; }
+            if (value !== 0 && lineBelow[x] !== 0) { return isAddable = true; }
         });
 
-        return isReady;
+        return isAddable;
     }
 
     public addTetrimino(tetrimino: Tetrimino) {
