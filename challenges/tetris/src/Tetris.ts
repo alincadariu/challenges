@@ -16,6 +16,10 @@ export class Tetris {
         return this._loop.isStopped;
     }
 
+    public get onLineClear() {
+        return this._board.onLineClear;
+    };
+
     private _board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
     private _loop = new GameLoop();
 
@@ -77,10 +81,11 @@ export class Tetris {
         if (this._board.isReadyToAdd(this._tetrimino)) {
             this._board.addTetrimino(this._tetrimino);
             this._tetrimino = null;
-            if (this._board.isGameOver) {
-                this._loop.stop();
-                return;
-            }
+        }
+
+        if (this._board.isGameOver) {
+            this._loop.stop();
+            return;
         }
     }
 

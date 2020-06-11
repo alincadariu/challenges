@@ -23,3 +23,22 @@ pauseButton.addEventListener('click', () => {
         tetris.pause();
     }
 });
+
+const lineToScore = (count: number) => {
+    switch (count) {
+        case 1: return 40;
+        case 2: return 100;
+        case 3: return 300;
+        case 4: return 1000;
+    }
+};
+
+const score = document.querySelector<HTMLSpanElement>('#score');
+const lines = document.querySelector<HTMLSpanElement>('#lines');
+tetris.onLineClear((count) => {
+    const totalLineCount = parseInt(lines.innerText, 10) + count;
+    lines.innerText = `${totalLineCount}`;
+
+    const totalScore = parseInt(score.innerText, 10) + lineToScore(count);
+    score.innerText = `${totalScore}`;
+})

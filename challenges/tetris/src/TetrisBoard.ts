@@ -15,12 +15,17 @@ export class TetrisBoard {
         return false;
     }
 
+    private _onLineCleared = (_: number) => { }
+
     constructor(
         public readonly width: number,
         public readonly height: number,
     ) {
         this.state = Array.from({ length: this.height }, () => emptyArray(this.width));
     }
+
+    public onLineClear = (callback: (count: number) => void) =>
+        this._onLineCleared = callback;
 
     public isReadyToAdd(tetrimino: Tetrimino) {
         let isReady = false;
@@ -104,5 +109,11 @@ export class TetrisBoard {
             this.state.splice(y, 1);
             this.state.unshift(emptyArray(this.width));
         });
+
+        const count = filledRowIds.length;
+
+        if (!count) { return; }
+
+        this._onLineCleared(filledRowIds.length);
     }
 }

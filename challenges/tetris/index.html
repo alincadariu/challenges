@@ -12,6 +12,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            font-family: sans-serif;
         }
 
         .tetris-game {
@@ -23,10 +24,23 @@
         .tetris-menu {
             min-width: 30%;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: baseline;
             justify-content: space-evenly;
             padding: 0 12px;
+        }
+
+        .tetris-info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tetris-buttons {
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         .tetris-container {}
@@ -55,8 +69,14 @@
 <body>
     <div class="tetris-game">
         <div class="tetris-menu">
-            <button id="playButton" class="clear-button" type="button">New Game</button>
-            <button id="pauseButton" class="clear-button" type="button" disabled>Pause</button>
+            <div class="tetris-info">
+                <h2>Lines: <span id="lines">0</span></h2>
+                <h2>Score: <span id="score">0</span></h2>
+            </div>
+            <div class="tetris-buttons">
+                <button id="playButton" class="clear-button" type="button">New Game</button>
+                <button id="pauseButton" class="clear-button" type="button" disabled>Pause</button>
+            </div>
         </div>
         <div class="tetris-container">
             <canvas id="board"></canvas>
