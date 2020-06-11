@@ -46,13 +46,50 @@ export class TetrisBoard {
         tetrimino.shape.forEach((line, y) => {
             line.forEach((column, x) => {
                 if (column === 0) { return; }
-
                 this.state[y + tetrimino.y][x + tetrimino.x] = TetriminoType[tetrimino.name];
             });
         });
     }
 
+    public isAbleToMoveLeft(tetrimino: Tetrimino) {
+        let isAllowed = true;
+
+        const x = 0;
+        for (let y = 0; y < tetrimino.height; y++) {
+            if (tetrimino.shape[y][x] === 0) { continue; }
+
+            const boardY = tetrimino.y + y;
+            const boardX = tetrimino.x + x - 1;
+
+            isAllowed = isAllowed && this.state[boardY][boardX] === 0;
+        }
+
+        return isAllowed;
+    }
+
+    public isAbleToMoveRight(tetrimino: Tetrimino) {
+        if (this.isOverflowingRight(tetrimino)) { return false; }
+
+        let isAllowed = true;
+
+        const x = tetrimino.width - 1;
+        for (let y = 0; y < tetrimino.height; y++) {
+            if (tetrimino.shape[y][x] === 0) { continue; }
+
+            const boardY = tetrimino.y + y;
+            const boardX = tetrimino.x + x + 1;
+
+            isAllowed = isAllowed && this.state[boardY][boardX] === 0;
+        }
+
+        return isAllowed;
+    }
+
     public isOverflowingRight(tetrimino: Tetrimino) {
         return tetrimino.x + tetrimino.width > this.width;
+
+    }
+    public isOverflowingLeft(tetrimino: Tetrimino) {
+        return tetrimino.x < 0;
     }
 }

@@ -29,19 +29,16 @@ export class Tetrimino {
         this.width = this.shape[0].length;
     }
 
-    public left(limit: number) {
+    public left() {
         this.x -= 1;
-        this.x = Math.max(this.x, limit);
     }
 
-    public down(limit: number) {
+    public down() {
         this.y += 1;
-        this.y = Math.min(this.y, limit - this.height);
     }
 
-    public right(limit: number) {
+    public right() {
         this.x += 1;
-        this.x = Math.min(this.x, limit - this.width);
     }
 
     public rotate() {

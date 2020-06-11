@@ -78,37 +78,30 @@ export class Tetris {
     }
 
     private _step = () => {
-        this._tetrimino.down(this._board.height);
+        this._tetrimino.down();
     }
 
     private _keyBindings = (ev: KeyboardEvent) => {
         if (this.isPaused) { return; }
 
-        // FIXME: remove once properly clamping left / right movements 😛
-        const isReadyToAdd = this._board.isReadyToAdd(this._tetrimino);
-
         switch (ev.key) {
             case 'ArrowLeft':
-                this._tetrimino.left(0);
-                // FIXME: do a proper check (eg: determine the correct left limit given the current position)
-                if (!isReadyToAdd && this._board.isReadyToAdd(this._tetrimino)) {
-                    this._tetrimino.right(this._board.width);
+                if (this._board.isAbleToMoveLeft(this._tetrimino)) {
+                    this._tetrimino.left();
                 }
                 break;
             case 'ArrowRight':
-                this._tetrimino.right(this._board.width);
-                // FIXME: do a proper check (eg: determine the correct right limit given the current position)
-                if (!isReadyToAdd && this._board.isReadyToAdd(this._tetrimino)) {
-                    this._tetrimino.left(0);
+                if (this._board.isAbleToMoveRight(this._tetrimino)) {
+                    this._tetrimino.right();
                 }
                 break;
             case 'ArrowDown':
-                this._tetrimino.down(this._board.height);
+                this._tetrimino.down();
                 break;
             case 'ArrowUp':
                 this._tetrimino.rotate();
                 while (this._board.isOverflowingRight(this._tetrimino)) {
-                    this._tetrimino.left(0)
+                    this._tetrimino.left()
                 }
                 break;
             default: break;
