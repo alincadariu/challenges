@@ -7,6 +7,10 @@ import { CELL_SIZE } from './constants';
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 24;
 
+const PAINT_EVENT_ID = 'paint';
+const STEP_EVENT_ID = 'step';
+const DROP_EVENT_ID = 'drop';
+
 export class Tetris {
     public get isPaused() {
         return this._loop.isStopped;
@@ -29,13 +33,13 @@ export class Tetris {
         window.addEventListener('keydown', this._keyBindings);
 
         this._loop.addEvent({
-            id: 'painter',
+            id: PAINT_EVENT_ID,
             fps: 120,
             action: this._painter,
         });
 
         this._loop.addEvent({
-            id: 'stepper',
+            id: STEP_EVENT_ID,
             fps: 1,
             action: this._step,
         });
@@ -84,6 +88,17 @@ export class Tetris {
         this._tetrimino.down();
     }
 
+    private _drop = () => {
+        if (this._tetrimino) {
+            this._tetrimino.down();
+            this._painter();
+        } else {
+            this._loop.removeEvent(DROP_EVENT_ID);
+            this._loop.resumeEvent(PAINT_EVENT_ID);
+            this._loop.resumeEvent(STEP_EVENT_ID);
+        }
+    }
+
     private _keyBindings = (ev: KeyboardEvent) => {
         if (this.isPaused) { return; }
 
@@ -107,7 +122,16 @@ export class Tetris {
                     this._tetrimino.left()
                 }
                 break;
-            default: break;
+            case ' ':
+                this._loop.pauseEvent(PAINT_EVENT_ID);
+                this._loop.pauseEvent(STEP_EVENT_ID);
+                this._loop.addEvent({
+                    id: DROP_EVENT_ID,
+                    action: this._drop,
+                    fps: 240,
+                });
+
+            default: console.log(ev.key); break;
         }
     }
 }

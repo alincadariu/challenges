@@ -6,24 +6,48 @@ export type GameLoopEvent = {
     action: GameLoopAction;
 }
 
+type InternalGameLoopEvent =
+    GameLoopEvent & {
+        paused: boolean;
+    }
+
 export class GameLoop {
     public get isStopped() {
         return this._stopped;
     }
 
     private _handle: number;
-    private _events = new Map<string, GameLoopEvent>();
+    private _events = new Map<string, InternalGameLoopEvent>();
     private _eventStartMap = new Map<string, number>();
     private _stopped = false;
 
     constructor() { }
 
     public addEvent(event: GameLoopEvent) {
-        this._events.set(event.id, event);
+        this._events.set(event.id, {
+            ...event,
+            paused: false,
+        });
     }
 
-    public removeEvent(event: GameLoopEvent) {
-        this._events.delete(event.id);
+    public pauseEvent(id: string) {
+        const event = this._events.get(id);
+
+        if (!event) throw new Error(`Could not find event ${id}.`);
+
+        event.paused = true;
+    }
+
+    public resumeEvent(id: string) {
+        const event = this._events.get(id);
+
+        if (!event) throw new Error(`Could not find event ${id}.`);
+
+        event.paused = false;
+    }
+
+    public removeEvent(id: string) {
+        this._events.delete(id);
     };
 
     public start() {
@@ -44,7 +68,9 @@ export class GameLoop {
             return;
         }
 
-        this._events.forEach(({ fps, action, id }) => {
+        this._events.forEach(({ fps, action, id, paused }) => {
+            if (paused) { return; }
+
             const elapsed = current - this._eventStartMap.get(id);
 
             if (elapsed > 1000 / fps) {
