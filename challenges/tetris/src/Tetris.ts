@@ -106,8 +106,10 @@ export class Tetris {
                 this._tetrimino.down(this._board.height);
                 break;
             case 'ArrowUp':
-                // FIXME: can overflow when at the right extremity, check board when rotating and shift if needed
                 this._tetrimino.rotate();
+                while (this._board.isOverflowingRight(this._tetrimino)) {
+                    this._tetrimino.left(0)
+                }
                 break;
             default: break;
         }

@@ -51,4 +51,8 @@ export class TetrisBoard {
             });
         });
     }
+
+    public isOverflowingRight(tetrimino: Tetrimino) {
+        return tetrimino.x + tetrimino.width > this.width;
+    }
 }
