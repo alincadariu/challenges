@@ -23,7 +23,7 @@ export class Tetris {
     private _board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
     private _loop = new GameLoop();
 
-    private _tetrimino: Tetrimino;
+    private _tetrimino: Tetrimino | null;
     private _renderer: TetrisRenderer;
 
     private _onGameOver = () => { }
@@ -76,20 +76,27 @@ export class Tetris {
     }
 
     private _painter = () => {
-        if (!this._tetrimino) {
-            this._tetrimino = new Tetrimino();
-            this._tetrimino.x = Math.floor(this._board.width / 2) -
-                Math.floor(this._tetrimino.width / 2);
-        }
-
+        this._tetrimino = this._tetrimino ?? this._newTetrimino();
         this._renderer.clear();
         this._renderer.drawTetrimino(this._tetrimino);
         this._renderer.drawBoard(this._board);
 
-        if (this._board.isAddable(this._tetrimino)) {
-            this._board.addTetrimino(this._tetrimino);
-            this._tetrimino = null;
-        }
+        this._addToBoard();
+    }
+
+    private _addToBoard() {
+        if (!this._board.isAddable(this._tetrimino)) { return; }
+
+        this._board.addTetrimino(this._tetrimino);
+        this._tetrimino = null;
+    }
+
+    private _newTetrimino = () => {
+        const tetrimino = new Tetrimino();
+        tetrimino.x = Math.floor(this._board.width / 2) -
+            Math.floor(tetrimino.width / 2);
+
+        return tetrimino;
     }
 
     private _gameOver = () => {
@@ -101,6 +108,8 @@ export class Tetris {
     }
 
     private _step = () => {
+        if (!this._tetrimino) { return; }
+
         this._tetrimino.down();
     }
 
@@ -116,7 +125,7 @@ export class Tetris {
     }
 
     private _keyBindings = (ev: KeyboardEvent) => {
-        if (this.isPaused) { return; }
+        if (this.isPaused || !this._tetrimino) { return; }
 
         if (['ArrowUp', 'KeyW'].includes(ev.code)) {
             this._actionUp();
