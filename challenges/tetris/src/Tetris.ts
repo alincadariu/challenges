@@ -4,8 +4,8 @@ import { GameLoop } from './GameLoop';
 import { Tetrimino } from './Tetrimino';
 import { CELL_SIZE } from './constants';
 
-const BOARD_WIDTH = 20;
-const BOARD_HEIGHT = 30;
+const BOARD_WIDTH = 10;
+const BOARD_HEIGHT = 24;
 
 export class Tetris {
     public get isPaused() {
