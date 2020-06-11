@@ -28,6 +28,8 @@ export class GameLoop {
             ...event,
             paused: false,
         });
+
+        this._eventStartMap.set(event.id, performance.now());
     }
 
     public pauseEvent(id: string) {
@@ -54,7 +56,7 @@ export class GameLoop {
         this._stopped = false;
         this._handle = requestAnimationFrame((start) => {
             this._events.forEach((_, id) => this._eventStartMap.set(id, start));
-            this._draw(NaN);
+            this._draw(start);
         });
     }
 
