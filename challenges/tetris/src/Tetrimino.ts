@@ -41,7 +41,8 @@ export class Tetrimino {
         this.x += 1;
     }
 
-    public rotate() {
+    public rotate(rotate: 90 | -90 = 90) {
+        const isClockwise = rotate === 90;
         const theta = this.shape.reduce((omega, alpha) => omega.concat(alpha));
 
         let delta = [];
@@ -51,10 +52,17 @@ export class Tetrimino {
         for (let x = 0; x < lineCount; x++) {
             delta[x] = [];
 
-            for (let i = x; i < theta.length; i += lineCount) {
+            const start = isClockwise
+                ? x
+                : lineCount - 1 - x;
+
+            for (let i = start; i < theta.length; i += lineCount) {
                 delta[x].push(theta[i]);
             }
-            delta[x].reverse();
+
+            if (isClockwise) {
+                delta[x].reverse();
+            }
         }
 
         this.shape = delta;

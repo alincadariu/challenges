@@ -165,6 +165,10 @@ export class Tetris {
     private _actionUp = () => {
         this._tetrimino.rotate();
 
+        if (this._board.isOverlapping(this._tetrimino)) {
+            this._tetrimino.rotate(-90);
+        }
+
         while (this._board.isOverflowingRight(this._tetrimino)) {
             this._tetrimino.left()
         }

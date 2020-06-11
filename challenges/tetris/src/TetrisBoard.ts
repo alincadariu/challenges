@@ -67,6 +67,25 @@ export class TetrisBoard {
         }
     }
 
+    public isOverlapping(tetrimino: Tetrimino) {
+        let isOverlapping = false;
+
+        matrixForEach(tetrimino.shape, (value, y, x) => {
+            if (value === 0 || isOverlapping) { return; }
+
+            const boardY = tetrimino.y + y;
+            const boardX = tetrimino.x + x;
+
+            if (!this.state[boardY]) {
+                isOverlapping = true;
+            }
+
+            isOverlapping = isOverlapping || this.state[boardY][boardX] !== 0;
+        });
+
+        return isOverlapping;
+    }
+
     public isAbleToMoveLeft(tetrimino: Tetrimino) {
         let isAllowed = true;
 
