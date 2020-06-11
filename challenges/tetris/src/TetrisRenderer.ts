@@ -31,6 +31,19 @@ export class TetrisRenderer {
         });
     }
 
+    public drawGameOver() {
+        this._context.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        this._context.fillRect(0, 0, this._context.canvas.width, this._context.canvas.height);
+
+        const x = this._context.canvas.width / 2;
+        const y = this._context.canvas.height / 2;
+
+        this._context.font = 'bold 30px monospace';
+        this._context.textAlign = 'center';
+        this._context.fillStyle = '#333';
+        this._context.fillText('Game Over!', x, y);
+    }
+
     public drawTetrimino(tetrimino: Tetrimino) {
         this._context.fillStyle = tetrimino.color;
 

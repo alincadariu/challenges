@@ -11,6 +11,8 @@ const playButton = document.querySelector<HTMLButtonElement>('#playButton');
 playButton.addEventListener('click', () => {
     tetris.start();
     pauseButton.disabled = false;
+
+    playButton.blur();
 });
 
 const pauseButton = document.querySelector<HTMLButtonElement>('#pauseButton');
@@ -22,6 +24,8 @@ pauseButton.addEventListener('click', () => {
         pauseButton.innerText = 'Resume';
         tetris.pause();
     }
+
+    pauseButton.blur();
 });
 
 const lineToScore = (count: number) => {
@@ -41,4 +45,10 @@ tetris.onLineClear((count) => {
 
     const totalScore = parseInt(score.innerText, 10) + lineToScore(count);
     score.innerText = `${totalScore}`;
-})
+});
+
+tetris.onGameOver(() => {
+    score.innerText = '0';
+    lines.innerText = '0';
+    pauseButton.disabled = true;
+});

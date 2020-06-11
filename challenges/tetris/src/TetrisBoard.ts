@@ -16,16 +16,24 @@ export class TetrisBoard {
     }
 
     private _onLineCleared = (_: number) => { }
+    private _onGameOver = () => { }
 
     constructor(
         public readonly width: number,
         public readonly height: number,
     ) {
+        this.clear();
+    }
+
+    public clear() {
         this.state = Array.from({ length: this.height }, () => emptyArray(this.width));
     }
 
     public onLineClear = (callback: (count: number) => void) =>
         this._onLineCleared = callback;
+
+    public onGameOver = (callback: () => void) =>
+        this._onGameOver = callback;
 
     public isAddable(tetrimino: Tetrimino) {
         let isAddable = false;
@@ -53,6 +61,10 @@ export class TetrisBoard {
         });
 
         this._clearFilled();
+
+        if (this.isGameOver) {
+            this._onGameOver();
+        }
     }
 
     public isAbleToMoveLeft(tetrimino: Tetrimino) {

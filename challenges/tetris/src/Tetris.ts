@@ -26,6 +26,8 @@ export class Tetris {
     private _tetrimino: Tetrimino;
     private _renderer: TetrisRenderer;
 
+    private _onGameOver = () => { }
+
     constructor(
         canvas: HTMLCanvasElement,
     ) {
@@ -47,9 +49,15 @@ export class Tetris {
             fps: 1,
             action: this._step,
         });
+
+        this._board.onGameOver(this._gameOver);
     }
 
+    public onGameOver = (callback: () => void) =>
+        this._onGameOver = callback;
+
     public start() {
+        this._board.clear();
         this.resume();
     }
 
@@ -82,11 +90,14 @@ export class Tetris {
             this._board.addTetrimino(this._tetrimino);
             this._tetrimino = null;
         }
+    }
 
-        if (this._board.isGameOver) {
+    private _gameOver = () => {
+        this._board.onGameOver(() => {
+            this._onGameOver();
+            this._renderer.drawGameOver();
             this._loop.stop();
-            return;
-        }
+        });
     }
 
     private _step = () => {
