@@ -73,9 +73,16 @@ export class Tetris {
 
     private _painter = () => {
         this._tetrimino = this._tetrimino ?? this._newTetrimino();
+
         this._renderer.clear();
         this._renderer.drawTetrimino(this._tetrimino);
         this._renderer.drawBoard(this._board);
+
+        const preview = this._tetrimino.clone();
+        while(!isReadyToMerge(preview, this._board)) {
+            preview.down();
+        }
+        this._renderer.drawPreview(preview);
 
         this._addToBoard();
     }

@@ -58,4 +58,10 @@ export class TetrisRenderer {
             this._context.fillRect(x, y, CELL_SIZE - TETRIMINO_PADDING, CELL_SIZE - TETRIMINO_PADDING);
         });
     }
+
+    public drawPreview(tetrimino: Tetrimino) {
+        this._context.globalAlpha = 0.1;
+        this.drawTetrimino(tetrimino);
+        this._context.globalAlpha = 1;
+    }
 }

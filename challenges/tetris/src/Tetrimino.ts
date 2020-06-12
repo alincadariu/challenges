@@ -68,4 +68,15 @@ export class Tetrimino {
         this.shape = delta;
         [this.width, this.height] = [this.height, this.width];
     }
+
+    public clone() {
+        const clone = new Tetrimino(this._type);
+        clone.shape = JSON.parse(JSON.stringify(this.shape));
+        clone.width = this.width;
+        clone.height = this.height;
+        clone.x = this.x;
+        clone.y = this.y;
+
+        return clone;
+    }
 }
