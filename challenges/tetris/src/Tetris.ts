@@ -12,6 +12,8 @@ import {
 import {
     BOARD_WIDTH,
     BOARD_HEIGHT,
+    PREVIEW_WIDTH,
+    PREVIEW_HEIGHT,
 } from './constants';
 
 const PAINT_EVENT_ID = 'paint';
@@ -23,24 +25,42 @@ export class Tetris {
         return this._loop.isStopped;
     }
 
-    public set cellSize(value) {
-        this._canvas.width = value * BOARD_WIDTH;
-        this._canvas.height = value * BOARD_HEIGHT;
-        this._renderer.cellSize = value;
+    public set cellSize(cellSize) {
+        const previewCellSize = cellSize / 2;
+        this._next.width = previewCellSize * PREVIEW_WIDTH;
+        this._next.height = previewCellSize * PREVIEW_HEIGHT;
+        this._next.style.width = `${this._next.width}px`;
+        this._next.style.height = `${this._next.height}px`;
+        this._nextRenderer.cellSize = previewCellSize;
+
+        this._canvas.width = cellSize * BOARD_WIDTH;
+        this._canvas.height = cellSize * BOARD_HEIGHT;
+        this._canvas.style.width = `${this._canvas.width}px`;
+        this._canvas.style.height = `${this._canvas.height}px`;
+        this._renderer.cellSize = cellSize;
+
+        if (this._tetrimino) {
+            this._drawNextTetrimino();
+        }
     }
 
     private _board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
     private _loop = new GameLoop();
 
     private _tetrimino: Tetrimino | null;
+    private _nextTetrimino = new Tetrimino();
     private _renderer: TetrisRenderer;
+    private _nextRenderer: TetrisRenderer;
 
     constructor(
         private _canvas: HTMLCanvasElement,
+        private _next: HTMLCanvasElement,
     ) {
         this._canvas.style.setProperty('border', '5px solid #efefef');
+        this._next.style.setProperty('border', '5px solid #efefef');
 
         this._renderer = new TetrisRenderer(this._canvas);
+        this._nextRenderer = new TetrisRenderer(this._next);
         window.addEventListener('keydown', this._keyBindings);
 
         this._loop.addEvent({
@@ -76,7 +96,7 @@ export class Tetris {
     }
 
     private _painter = () => {
-        this._tetrimino = this._tetrimino ?? this._newTetrimino();
+        this._tetrimino = this._tetrimino ?? this._getNextTetrimino();
 
         this._renderer.clear();
         this._renderer.drawTetrimino(this._tetrimino);
@@ -113,12 +133,24 @@ export class Tetris {
         this._tetrimino = null;
     }
 
-    private _newTetrimino = () => {
-        const tetrimino = new Tetrimino();
+    private _getNextTetrimino = () => {
+        const tetrimino = this._nextTetrimino;
         tetrimino.x = Math.floor(this._board.width / 2) -
             Math.floor(tetrimino.width / 2);
+        tetrimino.y = 0;
+
+        this._nextTetrimino = new Tetrimino();
+        this._nextTetrimino.x = PREVIEW_WIDTH / 2 - this._nextTetrimino.width / 2;
+        this._nextTetrimino.y = PREVIEW_HEIGHT / 2 - this._nextTetrimino.height / 2;
+
+        this._drawNextTetrimino();
 
         return tetrimino;
+    }
+
+    private _drawNextTetrimino = () => {
+        this._nextRenderer.clear();
+        this._nextRenderer.drawTetrimino(this._nextTetrimino);
     }
 
     private _step = () => {

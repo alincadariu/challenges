@@ -1,10 +1,13 @@
 import { Tetris } from './src/Tetris';
 import { BOARD_HEIGHT } from './src/constants';
 
-const canvas = document.querySelector<HTMLCanvasElement>('#board');
-if (!canvas) { throw new Error('Could not find the canvas element!'); }
+const board = document.querySelector<HTMLCanvasElement>('#board');
+if (!board) { throw new Error('Could not find the canvas element!'); }
 
-const tetris = new Tetris(canvas);
+const preview = document.querySelector<HTMLCanvasElement>('#preview');
+if (!preview) { throw new Error('Could not find the canvas element!'); }
+
+const tetris = new Tetris(board, preview);
 
 const playButton = document.querySelector<HTMLButtonElement>('#playButton');
 playButton.addEventListener('keydown', ev => ev.stopPropagation());
@@ -39,7 +42,7 @@ const lineToScore = (count: number) => {
 
 const score = document.querySelector<HTMLSpanElement>('#score');
 const lines = document.querySelector<HTMLSpanElement>('#lines');
-canvas.addEventListener('linebreak', ({ detail: { count } }: CustomEvent) => {
+board.addEventListener('linebreak', ({ detail: { count } }: CustomEvent) => {
     const totalLineCount = parseInt(lines.innerText, 10) + count;
     lines.innerText = `${totalLineCount}`;
 
@@ -47,14 +50,14 @@ canvas.addEventListener('linebreak', ({ detail: { count } }: CustomEvent) => {
     score.innerText = `${totalScore}`;
 });
 
-canvas.addEventListener('gameover', () => {
+board.addEventListener('gameover', () => {
     score.innerText = '0';
     lines.innerText = '0';
     pauseButton.disabled = true;
 });
 
 const resize = () => {
-    const { height } = canvas.parentElement.getBoundingClientRect();
+    const { height } = board.parentElement.getBoundingClientRect();
     const cellSize = Math.floor(height / BOARD_HEIGHT);
     tetris.cellSize = cellSize;
 };
