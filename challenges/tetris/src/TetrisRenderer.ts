@@ -1,10 +1,18 @@
 import { TetrisBoard } from './TetrisBoard';
-import { CELL_SIZE, TETRIMINO_PADDING } from './constants';
 import { Tetrimino } from './Tetrimino';
 import { TETRIMIN_COLOR_MAP } from './TetriminoType';
 import { matrixForEach } from './utils';
 
 export class TetrisRenderer {
+    public set cellSize(value: number) {
+        this._cellSize = value;
+    }
+
+    private get _padding() {
+        return this._cellSize / 20;
+    }
+
+    private _cellSize = 0;
     private _context: CanvasRenderingContext2D;
 
     constructor(canvas: HTMLCanvasElement | CanvasRenderingContext2D) {
@@ -24,10 +32,10 @@ export class TetrisRenderer {
             const color = TETRIMIN_COLOR_MAP[value];
             this._context.fillStyle = color;
 
-            const x = CELL_SIZE * valueX;
-            const y = CELL_SIZE * valueY;
+            const x = this._cellSize * valueX;
+            const y = this._cellSize * valueY;
 
-            this._context.fillRect(x, y, CELL_SIZE - TETRIMINO_PADDING, CELL_SIZE - TETRIMINO_PADDING)
+            this._context.fillRect(x, y, this._cellSize - this._padding, this._cellSize - this._padding)
         });
     }
 
@@ -50,12 +58,12 @@ export class TetrisRenderer {
         matrixForEach(tetrimino.shape, (value, valueY, valueX) => {
             if (value === 0) { return; }
 
-            const shiftX = tetrimino.x * CELL_SIZE;
-            const shiftY = tetrimino.y * CELL_SIZE;
-            const x = CELL_SIZE * valueX + shiftX;
-            const y = CELL_SIZE * valueY + shiftY;
+            const shiftX = tetrimino.x * this._cellSize;
+            const shiftY = tetrimino.y * this._cellSize;
+            const x = this._cellSize * valueX + shiftX;
+            const y = this._cellSize * valueY + shiftY;
 
-            this._context.fillRect(x, y, CELL_SIZE - TETRIMINO_PADDING, CELL_SIZE - TETRIMINO_PADDING);
+            this._context.fillRect(x, y, this._cellSize - this._padding, this._cellSize - this._padding);
         });
     }
 

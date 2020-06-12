@@ -1,2 +1,2 @@
-export const CELL_SIZE = 20;
-export const TETRIMINO_PADDING = 1;
+export const BOARD_WIDTH = 10;
+export const BOARD_HEIGHT = 24;

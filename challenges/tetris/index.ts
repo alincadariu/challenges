@@ -1,8 +1,7 @@
 import { Tetris } from './src/Tetris';
+import { BOARD_HEIGHT } from './src/constants';
 
-// TODO: Extract this logic to TetrisEngine
 const canvas = document.querySelector<HTMLCanvasElement>('#board');
-
 if (!canvas) { throw new Error('Could not find the canvas element!'); }
 
 const tetris = new Tetris(canvas);
@@ -53,3 +52,11 @@ canvas.addEventListener('gameover', () => {
     lines.innerText = '0';
     pauseButton.disabled = true;
 });
+
+const resize = () => {
+    const { height } = canvas.parentElement.getBoundingClientRect();
+    const cellSize = Math.floor(height / BOARD_HEIGHT);
+    tetris.cellSize = cellSize;
+};
+window.addEventListener('resize', resize);
+resize();

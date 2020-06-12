@@ -18,7 +18,9 @@
         .tetris-game {
             display: flex;
             max-width: 100%;
-            padding: 24px;
+            height: 100%;
+            padding: 48px;
+            box-sizing: border-box;
         }
 
         .tetris-menu {
@@ -43,7 +45,11 @@
             justify-content: center;
         }
 
-        .tetris-container {}
+        .tetris-container {
+            width: 100%;
+            height: calc(100% - 24px);
+            text-align: center;
+        }
 
         button.clear-button {
             min-width: 125px;

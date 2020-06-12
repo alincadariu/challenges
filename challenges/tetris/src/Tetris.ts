@@ -2,7 +2,6 @@ import { TetrisBoard } from './TetrisBoard';
 import { TetrisRenderer } from './TetrisRenderer';
 import { GameLoop } from './GameLoop';
 import { Tetrimino } from './Tetrimino';
-import { CELL_SIZE } from './constants';
 import {
     isOverlapping,
     isFreeToMoveRight,
@@ -10,9 +9,10 @@ import {
     isReadyToMerge,
     isFreeToMoveLeft,
 } from './utils';
-
-const BOARD_WIDTH = 10;
-const BOARD_HEIGHT = 24;
+import {
+    BOARD_WIDTH,
+    BOARD_HEIGHT,
+} from './constants';
 
 const PAINT_EVENT_ID = 'paint';
 const STEP_EVENT_ID = 'step';
@@ -21,6 +21,12 @@ const DROP_EVENT_ID = 'drop';
 export class Tetris {
     public get isPaused() {
         return this._loop.isStopped;
+    }
+
+    public set cellSize(value) {
+        this._canvas.width = value * BOARD_WIDTH;
+        this._canvas.height = value * BOARD_HEIGHT;
+        this._renderer.cellSize = value;
     }
 
     private _board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
@@ -32,8 +38,6 @@ export class Tetris {
     constructor(
         private _canvas: HTMLCanvasElement,
     ) {
-        this._canvas.width = CELL_SIZE * BOARD_WIDTH;
-        this._canvas.height = CELL_SIZE * BOARD_HEIGHT;
         this._canvas.style.setProperty('border', '5px solid #efefef');
 
         this._renderer = new TetrisRenderer(this._canvas);
@@ -79,7 +83,7 @@ export class Tetris {
         this._renderer.drawBoard(this._board);
 
         const preview = this._tetrimino.clone();
-        while(!isReadyToMerge(preview, this._board)) {
+        while (!isReadyToMerge(preview, this._board)) {
             preview.down();
         }
         this._renderer.drawPreview(preview);
