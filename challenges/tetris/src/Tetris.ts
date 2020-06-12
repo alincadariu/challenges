@@ -23,26 +23,20 @@ export class Tetris {
         return this._loop.isStopped;
     }
 
-    public get onLineClear() {
-        return this._board.onLineClear;
-    };
-
     private _board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
     private _loop = new GameLoop();
 
     private _tetrimino: Tetrimino | null;
     private _renderer: TetrisRenderer;
 
-    private _onGameOver = () => { }
-
     constructor(
-        canvas: HTMLCanvasElement,
+        private _canvas: HTMLCanvasElement,
     ) {
-        canvas.width = CELL_SIZE * BOARD_WIDTH;
-        canvas.height = CELL_SIZE * BOARD_HEIGHT;
-        canvas.style.setProperty('border', '5px solid #efefef');
+        this._canvas.width = CELL_SIZE * BOARD_WIDTH;
+        this._canvas.height = CELL_SIZE * BOARD_HEIGHT;
+        this._canvas.style.setProperty('border', '5px solid #efefef');
 
-        this._renderer = new TetrisRenderer(canvas);
+        this._renderer = new TetrisRenderer(this._canvas);
         window.addEventListener('keydown', this._keyBindings);
 
         this._loop.addEvent({
@@ -56,12 +50,7 @@ export class Tetris {
             fps: 1,
             action: this._step,
         });
-
-        this._board.onGameOver(this._gameOver);
     }
-
-    public onGameOver = (callback: () => void) =>
-        this._onGameOver = callback;
 
     public start() {
         this._board.clear();
@@ -94,7 +83,22 @@ export class Tetris {
     private _addToBoard() {
         if (!isReadyToMerge(this._tetrimino, this._board)) { return; }
 
-        this._board.addTetrimino(this._tetrimino);
+        this._board.merge(this._tetrimino);
+        const count = this._board.clearFilledRows();
+
+        if (count) {
+            this._canvas.dispatchEvent(new CustomEvent('linebreak', {
+                detail: {
+                    count,
+                }
+            }));
+        }
+
+        if (this._board.isGameOver) {
+            this._canvas.dispatchEvent(new CustomEvent('gameover'));
+            this._renderer.drawGameOver();
+            this._loop.stop();
+        }
         this._tetrimino = null;
     }
 
@@ -104,14 +108,6 @@ export class Tetris {
             Math.floor(tetrimino.width / 2);
 
         return tetrimino;
-    }
-
-    private _gameOver = () => {
-        this._board.onGameOver(() => {
-            this._onGameOver();
-            this._renderer.drawGameOver();
-            this._loop.stop();
-        });
     }
 
     private _step = () => {

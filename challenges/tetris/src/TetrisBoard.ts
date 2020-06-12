@@ -14,9 +14,6 @@ export class TetrisBoard {
         return false;
     }
 
-    private _onLineCleared = (_: number) => { }
-    private _onGameOver = () => { }
-
     constructor(
         public readonly width: number,
         public readonly height: number,
@@ -35,15 +32,9 @@ export class TetrisBoard {
                 this.state[y + tetrimino.y][x + tetrimino.x] = TetriminoType[tetrimino.name];
             });
         });
-
-        this._clearFilled();
-
-        if (this.isGameOver) {
-            this._onGameOver();
-        }
     }
 
-    private _clearFilled() {
+    public clearFilledRows() {
         const filledRowIds = [];
 
         this.state.forEach((line, y) => {
@@ -61,6 +52,6 @@ export class TetrisBoard {
 
         if (!count) { return; }
 
-        this._onLineCleared(filledRowIds.length);
+        return count;
     }
 }

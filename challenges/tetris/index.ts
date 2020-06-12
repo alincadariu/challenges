@@ -39,7 +39,7 @@ const lineToScore = (count: number) => {
 
 const score = document.querySelector<HTMLSpanElement>('#score');
 const lines = document.querySelector<HTMLSpanElement>('#lines');
-tetris.onLineClear((count) => {
+canvas.addEventListener('linebreak', ({ detail: { count } }: CustomEvent) => {
     const totalLineCount = parseInt(lines.innerText, 10) + count;
     lines.innerText = `${totalLineCount}`;
 
@@ -47,7 +47,7 @@ tetris.onLineClear((count) => {
     score.innerText = `${totalScore}`;
 });
 
-tetris.onGameOver(() => {
+canvas.addEventListener('gameover', () => {
     score.innerText = '0';
     lines.innerText = '0';
     pauseButton.disabled = true;
