@@ -8,6 +8,7 @@ if (!canvas) { throw new Error('Could not find the canvas element!'); }
 const tetris = new Tetris(canvas);
 
 const playButton = document.querySelector<HTMLButtonElement>('#playButton');
+playButton.addEventListener('keydown', ev => ev.stopPropagation());
 playButton.addEventListener('click', () => {
     tetris.start();
     pauseButton.disabled = false;
@@ -16,16 +17,16 @@ playButton.addEventListener('click', () => {
 });
 
 const pauseButton = document.querySelector<HTMLButtonElement>('#pauseButton');
-pauseButton.addEventListener('click', () => {
+pauseButton.addEventListener('keydown', ev => ev.stopPropagation());
+pauseButton.addEventListener('click', (ev) => {
     if (tetris.isPaused) {
         pauseButton.innerText = 'Pause';
         tetris.resume();
+        pauseButton.blur();
     } else {
         pauseButton.innerText = 'Resume';
         tetris.pause();
     }
-
-    pauseButton.blur();
 });
 
 const lineToScore = (count: number) => {
