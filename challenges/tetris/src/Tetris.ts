@@ -3,6 +3,13 @@ import { TetrisRenderer } from './TetrisRenderer';
 import { GameLoop } from './GameLoop';
 import { Tetrimino } from './Tetrimino';
 import { CELL_SIZE } from './constants';
+import {
+    isOverlapping,
+    isFreeToMoveRight,
+    isOverflowingRight,
+    isReadyToMerge,
+    isFreeToMoveLeft,
+} from './utils';
 
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 24;
@@ -85,7 +92,7 @@ export class Tetris {
     }
 
     private _addToBoard() {
-        if (!this._board.isAddable(this._tetrimino)) { return; }
+        if (!isReadyToMerge(this._tetrimino, this._board)) { return; }
 
         this._board.addTetrimino(this._tetrimino);
         this._tetrimino = null;
@@ -165,23 +172,28 @@ export class Tetris {
     private _actionUp = () => {
         this._tetrimino.rotate();
 
-        if (this._board.isOverlapping(this._tetrimino)) {
-            this._tetrimino.rotate(-90);
+        let leftAdjustment = 0;
+        while (isOverflowingRight(this._tetrimino, this._board)) {
+            this._tetrimino.left()
+            leftAdjustment++;
         }
 
-        while (this._board.isOverflowingRight(this._tetrimino)) {
-            this._tetrimino.left()
+        if (isOverlapping(this._tetrimino, this._board)) {
+            this._tetrimino.rotate(-90);
+            while (leftAdjustment-- > 0) {
+                this._tetrimino.right();
+            }
         }
     }
 
     private _actionRight = () => {
-        if (!this._board.isAbleToMoveRight(this._tetrimino)) { return; }
+        if (!isFreeToMoveRight(this._tetrimino, this._board)) { return; }
 
         this._tetrimino.right();
     }
 
     private _actionLeft = () => {
-        if (!this._board.isAbleToMoveLeft(this._tetrimino)) { return; }
+        if (!isFreeToMoveLeft(this._tetrimino, this._board)) { return; }
 
         this._tetrimino.left();
     }

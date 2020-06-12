@@ -1,6 +1,5 @@
 import { Tetrimino } from './Tetrimino';
 import { TetriminoType } from './TetriminoType';
-import { matrixForEach } from './utils';
 
 const emptyArray = (count: number) => Array(count).fill(0);
 
@@ -29,30 +28,7 @@ export class TetrisBoard {
         this.state = Array.from({ length: this.height }, () => emptyArray(this.width));
     }
 
-    public onLineClear = (callback: (count: number) => void) =>
-        this._onLineCleared = callback;
-
-    public onGameOver = (callback: () => void) =>
-        this._onGameOver = callback;
-
-    public isAddable(tetrimino: Tetrimino) {
-        let isAddable = false;
-
-        matrixForEach(tetrimino.shape, (value, valueY, valueX) => {
-            const y = tetrimino.y + valueY;
-            const x = tetrimino.x + valueX;
-
-            const lineBelow = this.state[y + 1];
-
-            if (!lineBelow) { return isAddable = true; }
-
-            if (value !== 0 && lineBelow[x] !== 0) { return isAddable = true; }
-        });
-
-        return isAddable;
-    }
-
-    public addTetrimino(tetrimino: Tetrimino) {
+    public merge(tetrimino: Tetrimino) {
         tetrimino.shape.forEach((line, y) => {
             line.forEach((column, x) => {
                 if (column === 0) { return; }
@@ -65,67 +41,6 @@ export class TetrisBoard {
         if (this.isGameOver) {
             this._onGameOver();
         }
-    }
-
-    public isOverlapping(tetrimino: Tetrimino) {
-        let isOverlapping = false;
-
-        matrixForEach(tetrimino.shape, (value, y, x) => {
-            if (value === 0 || isOverlapping) { return; }
-
-            const boardY = tetrimino.y + y;
-            const boardX = tetrimino.x + x;
-
-            if (!this.state[boardY]) {
-                isOverlapping = true;
-            }
-
-            isOverlapping = isOverlapping || this.state[boardY][boardX] !== 0;
-        });
-
-        return isOverlapping;
-    }
-
-    public isAbleToMoveLeft(tetrimino: Tetrimino) {
-        let isAllowed = true;
-
-        const x = 0;
-        for (let y = 0; y < tetrimino.height; y++) {
-            if (tetrimino.shape[y][x] === 0) { continue; }
-
-            const boardY = tetrimino.y + y;
-            const boardX = tetrimino.x + x - 1;
-
-            isAllowed = isAllowed && this.state[boardY][boardX] === 0;
-        }
-
-        return isAllowed;
-    }
-
-    public isAbleToMoveRight(tetrimino: Tetrimino) {
-        if (this.isOverflowingRight(tetrimino)) { return false; }
-
-        let isAllowed = true;
-
-        const x = tetrimino.width - 1;
-        for (let y = 0; y < tetrimino.height; y++) {
-            if (tetrimino.shape[y][x] === 0) { continue; }
-
-            const boardY = tetrimino.y + y;
-            const boardX = tetrimino.x + x + 1;
-
-            isAllowed = isAllowed && this.state[boardY][boardX] === 0;
-        }
-
-        return isAllowed;
-    }
-
-    public isOverflowingRight(tetrimino: Tetrimino) {
-        return tetrimino.x + tetrimino.width > this.width;
-    }
-
-    public isOverflowingLeft(tetrimino: Tetrimino) {
-        return tetrimino.x < 0;
     }
 
     private _clearFilled() {
