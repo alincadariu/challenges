@@ -28,17 +28,16 @@ const Tetriminos = [
     [0, 0, 0]]
 ];
 const CELL_SIZE = 30;
+const PADDING = 1;
 
 export class Tetrimino {
 
     public shape: number[][];
     public x: number;
     public y: number;
-    public color: string;
     public id: number;
     public cellSize: number;
-    public distanceToLeft;
-    public distanceToRight;
+    public padding: number;
 
     constructor() {
         this.id = Math.floor(Math.random() * 7);
@@ -46,40 +45,7 @@ export class Tetrimino {
         this.x = 0;
         this.y = 0;
         this.cellSize = CELL_SIZE;
-
+        this.padding = PADDING;
     }
 
-    get distanceLeft() {
-        this.distanceToLeftEdge();
-        return this.distanceToLeft;
-    }
-    get distanceRight() {
-        this.distanceToRightEdge();
-        return this.distanceToRight;
-    }
-
-    public distanceToLeftEdge() {
-        let nextState = { ...this, x: this.x, y: this.y + 1 };
-        this.distanceToLeft = 100;
-        nextState.shape.forEach((row) => {
-            row.forEach((value, columnIndex) => {
-                if (value > 0) {
-                    this.distanceToLeft = Math.min(this.distanceToLeft, columnIndex);
-                }
-            });
-        });
-    }
-
-    public distanceToRightEdge() {
-        let nextState = { ...this, x: this.x, y: this.y + 1 };
-        this.distanceToRight = 0;
-        nextState.shape.forEach((row) => {
-            row.forEach((value, columnIndex) => {
-                if (value > 0) {
-                    this.distanceToRight = Math.max(this.distanceToRight, columnIndex);
-                }
-            });
-        });
-
-    }
 }

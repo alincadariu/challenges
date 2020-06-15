@@ -1,0 +1,32 @@
+body {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+canvas {
+    border: 2px solid;
+    border-radius: 3px;
+}
+
+#gameButton, #pauseButton{
+    padding:10px 20px;
+    border-radius:5px;
+    font-weight: 500;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family: Sans-serif;
+    color:#FFFFFF;
+    text-align:center;
+    background-color: #f14e4e;
+}
+
+#textTime, #textLines {
+    font-family: Sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+}
+
+#controls {
+    margin: auto;
+    width: 250px;
+}

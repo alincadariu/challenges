@@ -2,12 +2,11 @@ const COLORS = [
     'cyan',
     'blue',
     'orange',
-    'yellow',
+    '#ffd700',
     'green',
     'purple',
     'red'
 ];
-
 export class GameRenderer {
 
     private _context: CanvasRenderingContext2D;
@@ -22,6 +21,7 @@ export class GameRenderer {
     }
 
     private _drawTetrimino(tetrimino) {
+
         tetrimino.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value > 0) {
@@ -29,8 +29,8 @@ export class GameRenderer {
                     this._context.fillRect(
                         (x + tetrimino.x) * tetrimino.cellSize,
                         (y + tetrimino.y) * tetrimino.cellSize,
-                        tetrimino.cellSize,
-                        tetrimino.cellSize);
+                        tetrimino.cellSize - 1,
+                        tetrimino.cellSize - 1);
                 }
             });
         });
@@ -44,8 +44,8 @@ export class GameRenderer {
                     this._context.fillRect(
                         x * (tetrimino.cellSize),
                         y * tetrimino.cellSize,
-                        tetrimino.cellSize,
-                        tetrimino.cellSize);
+                        tetrimino.cellSize - tetrimino.padding,
+                        tetrimino.cellSize - tetrimino.padding);
                 }
             });
         });
