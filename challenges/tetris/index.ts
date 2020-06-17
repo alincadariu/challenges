@@ -108,6 +108,7 @@ function play() {
     game.reset();
     seconds = 0;
     document.getElementById("textTime").textContent = `Time: ${seconds}`;
+    document.getElementById("pauseButton").textContent = `Pause`;
     isGameOver = false;
     start = performance.now();
     if (requestId) {
