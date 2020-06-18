@@ -5,6 +5,7 @@ export class Game {
     public board;
     public tetrimino: Tetrimino;
     public lines: number;
+    public isGameOver: boolean;
 
 
     constructor(private _canvas: HTMLCanvasElement) {
@@ -15,9 +16,9 @@ export class Game {
 
     public start() {
         this.addTetrimino();
-        this.board = this.emptyBoard;
+        //this.board = this.emptyBoard;
         this.lines = 0;
-        this.updateLines();
+        //this.updateLines();
     }
 
     public addTetrimino() {
@@ -65,16 +66,26 @@ export class Game {
     get canvas() {
         return this._canvas;
     }
+    public updateMove() {
 
-    public freeze(tetrimino) {
-        tetrimino.shape.forEach((row, y) => {
-            row.forEach((value, x) => {
-                if (value > 0) {
-                    this.board[y + this.tetrimino.y][x + this.tetrimino.x] = value;
-                }
-            });
-        });
+        let nextState: Tetrimino;
+        if (this.isOutside(nextState)) {
+            //nextState = game.shiftPiece(nextState);
+        }
+
+        this.isValidPos(nextState);
+
+        if (this.hasPiece(nextState)) {
+            return;
+        }
+        else if (this.isValidPos(nextState)) {
+            this.tetrimino = nextState;
+        }
+        else {
+            // updateGame();
+        }
     }
+
 
 
     public hasPiece(tetrimino) {
@@ -85,24 +96,28 @@ export class Game {
     }
 
 
-    public updateLines() {
-        this.board.forEach((row, rowIndex) => {
-            if (row.every(value => value > 0)) {
-                this.lines++;
-                this.board.splice(rowIndex, 1);
-                this.board.unshift(Array(COLUMNS).fill(0));
-            }
-        });
-        document.getElementById("textLines").textContent = `Lines: ${this.lines}`;
+    public updateGame() {
+        //g.freeze(game.tetrimino);
+        // game.updateLines();
+        if (this.tetrimino.y === 0) {
+            this.isGameOver = true;
+            return;
+        }
+        else {
+            this.addTetrimino();
+        }
+
     }
 
-    get emptyBoard() {
-        return Array.from({
-            length: Math.round(this._canvas.height / CELL_SIZE)
-        }, () => Array.from({
-            length: Math.round(this._canvas.width / CELL_SIZE)
-        }).fill(0));
+    public hardDrop() {
+        while (this.isValidPos(this.tetrimino)) {
+            this.tetrimino.y += 1;
+        }
+        this.tetrimino.y -= 1;
+        this.updateGame();
     }
+
+
 
     private _distanceLeft(nextState) {
         let distanceToLeft = 100;

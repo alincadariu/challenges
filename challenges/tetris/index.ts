@@ -1,32 +1,32 @@
 import { GameRenderer } from './src/GameRenderer';
 import { Game } from './src/Game';
+import { Tetrimino } from './src/Tetriminos/Tetrimino';
 
 const gameButton = document.getElementById('gameButton');
 const pauseButton = document.getElementById('pauseButton');
-const canvasDiv = document.getElementById('canvas');
 const canvas = document.createElement('canvas');
+const canvasDiv = document.getElementById('canvas') || canvas;
 const game = new Game(canvas);
 const renderer = new GameRenderer(canvas);
-const keys = new Array();
+const keys: string[] = new Array();
 canvasDiv.append(canvas);
 
-let seconds;
-let requestId;
-let isGameOver;
-let start;
-let nextState;
+let seconds: number;
+let requestId: number;
+let start: number;
+let nextState: Tetrimino;
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyReleased);
 gameButton.addEventListener('click', play);
-pauseButton.addEventListener('click', pause);
+//pauseButton.addEventListener('click', game.pause());
 
 
 function destroyEvents() {
     document.removeEventListener('keydown', keyDown);
     document.removeEventListener('keyup', keyReleased);
     document.removeEventListener('click', play);
-    document.removeEventListener('click', pause);
+    // document.removeEventListener('click', pause);
 }
 
 function keyDown(ev: KeyboardEvent) {
@@ -34,21 +34,15 @@ function keyDown(ev: KeyboardEvent) {
     keys[ev.key] = true;
 
     if (keys['e']) {
-        hardDrop();
+        //hardDrop();
     }
 
     if (keys['s'] || keys['ArrowDown']) {
-        nextState = {
-            ...game.tetrimino, x: game.tetrimino.x, y: game.tetrimino.y + 1
-        };
-        updateMove();
+
     }
 
     if (keys['a'] || keys['ArrowLeft']) {
-        nextState = {
-            ...game.tetrimino, x: game.tetrimino.x - 1, y: game.tetrimino.y
-        };
-        updateMove();
+
     }
 
     if (keys['d'] || keys['ArrowRight']) {
@@ -57,62 +51,26 @@ function keyDown(ev: KeyboardEvent) {
 
     if (keys['w'] || keys['ArrowUp']) {
         game.tetrimino.rotate();
-        updateMove();
+        // updateMove();
     }
 
 }
 
-function updateGame() {
-    game.freeze(game.tetrimino);
-    game.updateLines();
-    if (game.tetrimino.y === 0) {
-        isGameOver = true;
-        return;
-    }
-    else {
-        game.addTetrimino();
-    }
 
-}
 
-function hardDrop() {
-    while (game.isValidPos(game.tetrimino)) {
-        game.tetrimino.y += 1;
-    }
-    game.tetrimino.y -= 1;
-    updateGame();
-}
 
 function keyReleased(ev: KeyboardEvent) {
     keys[ev.key] = false;
 }
 
-function updateMove() {
 
-
-    if (game.isOutside(nextState)) {
-        nextState = game.shiftPiece(nextState);
-    }
-
-    game.isValidPos(nextState);
-
-    if (game.hasPiece(nextState)) {
-        return;
-    }
-    else if (game.isValidPos(nextState)) {
-        game.tetrimino = nextState;
-    }
-    else {
-        updateGame();
-    }
-}
 
 function play() {
     game.start();
     seconds = 0;
     document.getElementById("textTime").textContent = `Time: ${seconds}`;
     document.getElementById("pauseButton").textContent = `Pause`;
-    isGameOver = false;
+    //isGameOver = false;
     start = performance.now();
     if (requestId) {
         cancelAnimationFrame(requestId);
@@ -123,7 +81,7 @@ function play() {
 function animate() {
     let elapsed = performance.now() - start;
 
-    if (isGameOver) {
+    if (game.isGameOver) {
         renderer.drawGameOver();
         cancelAnimationFrame(requestId);
         return;
@@ -134,10 +92,7 @@ function animate() {
         seconds++;
         document.getElementById("textTime").textContent = `Time: ${seconds}`;
 
-        nextState = {
-            ...game.tetrimino, x: game.tetrimino.x, y: game.tetrimino.y + 1
-        };
-        updateMove();
+
     }
 
     renderer.updateTetrimino(game.tetrimino);
@@ -146,15 +101,6 @@ function animate() {
     requestId = requestAnimationFrame(animate);
 }
 
-function pause() {
-    if (!requestId) {
-        animate();
-        document.getElementById("pauseButton").textContent = `Pause`;
-        return;
-    }
-    document.getElementById("pauseButton").textContent = `Resume`;
-    cancelAnimationFrame(requestId);
-    requestId = null;
-}
+
 
 play();
