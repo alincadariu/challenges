@@ -1,7 +1,5 @@
 import { Tetrimino } from "./Tetriminos/Tetrimino";
-
-const ROWS = 20;
-const COLUMNS = 10;
+import { CELL_SIZE, PADDING, ROWS, COLUMNS } from './Constants';
 export class Game {
 
     public board;
@@ -10,12 +8,12 @@ export class Game {
 
 
     constructor(private _canvas: HTMLCanvasElement) {
-        this.reset();
-        this._canvas.width = (this.tetrimino.cellSize * COLUMNS) - this.tetrimino.padding;
-        this._canvas.height = (this.tetrimino.cellSize * ROWS) - this.tetrimino.padding;
+        this.start();
+        this._canvas.width = (CELL_SIZE * COLUMNS) - PADDING;
+        this._canvas.height = (CELL_SIZE * ROWS) - PADDING;
     }
 
-    public reset() {
+    public start() {
         this.addTetrimino();
         this.board = this.emptyBoard;
         this.lines = 0;
@@ -34,7 +32,6 @@ export class Game {
     public isAvailable(x, y) { return this.board[y][x] === 0; };
 
     public isValidPos(tetrimino) {
-
         return tetrimino.shape.every((row, rowIndex) => {
             return row.every((value, colIndex) => {
                 let x = tetrimino.x + colIndex;
@@ -79,19 +76,12 @@ export class Game {
         });
     }
 
-    public rotate() {
-        let nextState = { ...this.tetrimino };
-        this._transpose(nextState);
-        nextState.shape.forEach(row => row.reverse());
-        return nextState;
-    }
 
-    private _transpose(tetrimino) {
-        for (let y = 0; y < tetrimino.shape.length; ++y) {
-            for (let x = 0; x < y; ++x) {
-                [tetrimino.shape[x][y], tetrimino.shape[y][x]] = [tetrimino.shape[y][x], tetrimino.shape[x][y]];
-            }
-        }
+    public hasPiece(tetrimino) {
+        let distanceRight = this._distanceRight(tetrimino);
+        let distanceBottom = this._distanceBottom(tetrimino);
+        return this.board[tetrimino.y][tetrimino.x] > 0 || this.board[tetrimino.y][tetrimino.x + distanceRight] > 0;
+
     }
 
 
@@ -108,9 +98,9 @@ export class Game {
 
     get emptyBoard() {
         return Array.from({
-            length: Math.round(this._canvas.height / this.tetrimino.cellSize)
+            length: Math.round(this._canvas.height / CELL_SIZE)
         }, () => Array.from({
-            length: Math.round(this._canvas.width / this.tetrimino.cellSize)
+            length: Math.round(this._canvas.width / CELL_SIZE)
         }).fill(0));
     }
 

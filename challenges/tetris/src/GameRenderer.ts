@@ -1,12 +1,4 @@
-const COLORS = [
-    'cyan',
-    'blue',
-    'orange',
-    '#ffd700',
-    'green',
-    'purple',
-    'red'
-];
+import { CELL_SIZE, PADDING, COLORS } from './Constants';
 export class GameRenderer {
 
     private _context: CanvasRenderingContext2D;
@@ -27,10 +19,10 @@ export class GameRenderer {
                 if (value > 0) {
                     this._context.fillStyle = COLORS[value - 1];
                     this._context.fillRect(
-                        (x + tetrimino.x) * tetrimino.cellSize,
-                        (y + tetrimino.y) * tetrimino.cellSize,
-                        tetrimino.cellSize - 1,
-                        tetrimino.cellSize - 1);
+                        (x + tetrimino.x) * CELL_SIZE,
+                        (y + tetrimino.y) * CELL_SIZE,
+                        CELL_SIZE - PADDING,
+                        CELL_SIZE - PADDING);
                 }
             });
         });
@@ -42,10 +34,10 @@ export class GameRenderer {
                 if (value > 0) {
                     this._context.fillStyle = COLORS[value - 1];
                     this._context.fillRect(
-                        x * (tetrimino.cellSize),
-                        y * tetrimino.cellSize,
-                        tetrimino.cellSize - tetrimino.padding,
-                        tetrimino.cellSize - tetrimino.padding);
+                        x * (CELL_SIZE),
+                        y * CELL_SIZE,
+                        CELL_SIZE - PADDING,
+                        CELL_SIZE - PADDING);
                 }
             });
         });
@@ -55,7 +47,7 @@ export class GameRenderer {
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     }
 
-    public gameOver() {
+    public drawGameOver() {
         this._context.font = '35px Sans-serif';
         this._context.fillStyle = 'black';
         this._context.fillText('GAME OVER', 50, 50);

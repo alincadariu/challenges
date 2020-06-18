@@ -1,51 +1,38 @@
-const Tetriminos = [
-    [[0, 0, 0, 0],
-    [1, 1, 1, 1],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]],
-
-    [[2, 0, 0],
-    [2, 2, 2],
-    [0, 0, 0]],
-
-    [[0, 0, 3],
-    [3, 3, 3],
-    [0, 0, 0]],
-
-    [[4, 4],
-    [4, 4]],
-
-    [[0, 5, 5],
-    [5, 5, 0],
-    [0, 0, 0]],
-
-    [[0, 6, 0],
-    [6, 6, 6],
-    [0, 0, 0]],
-
-    [[7, 7, 0],
-    [0, 7, 7],
-    [0, 0, 0]]
-];
-const CELL_SIZE = 30;
-const PADDING = 1;
+import { TETRIMINOS, CELL_SIZE, PADDING } from '../Constants';
 
 export class Tetrimino {
 
     public shape: number[][];
     public x: number;
     public y: number;
-    public id: number;
-    public cellSize: number;
-    public padding: number;
+    private _id: number;
 
     constructor() {
-        this.id = Math.floor(Math.random() * 7);
-        this.shape = Tetriminos[this.id];
+        this._id = Math.floor(Math.random() * 7);
+        this.shape = TETRIMINOS[this._id];
         this.x = 0;
         this.y = 0;
-        this.cellSize = CELL_SIZE;
-        this.padding = PADDING;
+    }
+
+    public get id() {
+        return this._id;
+    }
+
+    public moveLeft() {
+        this.x -= 1;
+    }
+
+    public moveRight() {
+        this.x += 1;
+    }
+
+    public rotate() {
+        for (let y = 0; y < this.shape.length; ++y) {
+            for (let x = 0; x < y; ++x) {
+                [this.shape[x][y], this.shape[y][x]] = [this.shape[y][x], this.shape[x][y]];
+            }
+        }
+        this.shape.forEach(row => row.reverse());
     }
 
 }

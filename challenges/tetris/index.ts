@@ -52,14 +52,11 @@ function keyDown(ev: KeyboardEvent) {
     }
 
     if (keys['d'] || keys['ArrowRight']) {
-        nextState = {
-            ...game.tetrimino, x: game.tetrimino.x + 1, y: game.tetrimino.y
-        };
-        updateMove();
+        game.tetrimino.moveRight();
     }
 
     if (keys['w'] || keys['ArrowUp']) {
-        nextState = game.rotate();
+        game.tetrimino.rotate();
         updateMove();
     }
 
@@ -92,11 +89,17 @@ function keyReleased(ev: KeyboardEvent) {
 
 function updateMove() {
 
+
     if (game.isOutside(nextState)) {
         nextState = game.shiftPiece(nextState);
     }
 
-    if (game.isValidPos(nextState)) {
+    game.isValidPos(nextState);
+
+    if (game.hasPiece(nextState)) {
+        return;
+    }
+    else if (game.isValidPos(nextState)) {
         game.tetrimino = nextState;
     }
     else {
@@ -105,7 +108,7 @@ function updateMove() {
 }
 
 function play() {
-    game.reset();
+    game.start();
     seconds = 0;
     document.getElementById("textTime").textContent = `Time: ${seconds}`;
     document.getElementById("pauseButton").textContent = `Pause`;
@@ -121,7 +124,7 @@ function animate() {
     let elapsed = performance.now() - start;
 
     if (isGameOver) {
-        renderer.gameOver();
+        renderer.drawGameOver();
         cancelAnimationFrame(requestId);
         return;
     }
@@ -155,6 +158,3 @@ function pause() {
 }
 
 play();
-
-
-
