@@ -1,4 +1,4 @@
-import { CELL_SIZE, PADDING, COLORS } from './Constants';
+import { CELL_SIZE, PADDING, COLORS } from './constants';
 export class GameRenderer {
 
     private _context: CanvasRenderingContext2D;
@@ -28,8 +28,8 @@ export class GameRenderer {
         });
     }
 
-    public drawBoard(board, tetrimino) {
-        board.forEach((row, y) => {
+    public drawBoard(board) {
+        board.state.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value > 0) {
                     this._context.fillStyle = COLORS[value - 1];

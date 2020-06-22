@@ -1,5 +1,4 @@
-import { TETRIMINOS, CELL_SIZE, PADDING } from '../constants';
-
+import { TETRIMINOS, ROWS } from '../constants';
 export class Tetrimino {
 
     private _shape: number[][];
@@ -61,6 +60,21 @@ export class Tetrimino {
             }
         }
         //this.shape.forEach(row => row.reverse());
+    }
+    public isAboveFloor() {
+        return this._y + this._height < ROWS;
+    };
+
+    public canMoveLeft(board) {
+        return this._shape.every((row, y) => {
+            return board.state[this._y + y][this._x - 1] === 0;
+        });
+    }
+
+    public canMoveRight(board) {
+        return this._shape.every((row, y) => {
+            return board.state[this._y + y][this._x + this._width] === 0;
+        });
     }
 
     public clone() {

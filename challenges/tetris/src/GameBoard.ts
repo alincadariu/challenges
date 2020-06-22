@@ -1,44 +1,44 @@
-
-import { CELL_SIZE, COLUMNS } from './Constants';
+import { COLUMNS } from './constants';
 import { Tetrimino } from './Tetriminos/Tetrimino';
-class GameBoard {
+export class GameBoard {
 
     public state: unknown[][];
+    private _completedLines: number;
 
     constructor(private _height: number, private _width: number) {
-        this.clear();
+        this.state = this.clearBoard();
+        this._completedLines = 0;
+        document.getElementById("textLines").textContent = `Lines: ${this._completedLines}`;
     }
 
-    public clear() {
-        this.state = this.emptyBoard;
+    public addCompletedLine() {
+        this._completedLines += 1;
     }
 
-    public get emptyBoard() {
+    public clearBoard() {
         return Array.from({
-            length: Math.round(this._height / CELL_SIZE)
+            length: Math.round(this._height)
         }, () => Array.from({
-            length: Math.round(this._width / CELL_SIZE)
+            length: Math.round(this._width)
         }).fill(0));
     }
 
     public get isGameOver() {
-        this.state[0].some(element => {
-            if (element !== 0) { return true; }
+        return this.state[1].some(element => {
+            return element !== 0
         });
-
-        return false;
     }
 
 
-    public clearLines() {
+    public checkCompletedLines() {
         this.state.forEach((row, rowIndex) => {
             if (row.every(value => value > 0)) {
-                // count number of lines
+                this.addCompletedLine();
                 this.state.splice(rowIndex, 1);
                 this.state.unshift(Array(COLUMNS).fill(0));
             }
         });
-        // document.getElementById("textLines").textContent = `Lines: ${this.lines}`;
+        document.getElementById("textLines").textContent = `Lines: ${this._completedLines}`;
     }
 
     public freeze(tetrimino: Tetrimino) {
