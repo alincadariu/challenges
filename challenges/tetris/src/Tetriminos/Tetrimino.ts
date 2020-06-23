@@ -66,15 +66,25 @@ export class Tetrimino {
     };
 
     public canMoveLeft(board) {
-        return this._shape.every((row, y) => {
-            return board.state[this._y + y][this._x - 1] === 0;
+        let canMove = true;
+
+        this._shape.forEach((row, y) => {
+            if (this._shape[y][0] === 0) { return; }
+            canMove = canMove && board.state[this._y + y][this._x - 1] === 0;
         });
+
+        return canMove;
     }
 
     public canMoveRight(board) {
-        return this._shape.every((row, y) => {
-            return board.state[this._y + y][this._x + this._width] === 0;
+        let canMove = true;
+
+        this._shape.forEach((row, y) => {
+            if (this._shape[y][this._width - 1] === 0) { return; }
+            canMove = canMove && board.state[this._y + y][this._x + this._width] === 0;
         });
+
+        return canMove;
     }
 
     public clone() {

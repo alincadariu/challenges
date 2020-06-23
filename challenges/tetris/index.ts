@@ -11,47 +11,13 @@ canvasDiv.append(canvas);
 let requestId: number;
 let start: number;
 
-document.addEventListener('keydown', keyDown);
-document.addEventListener('keyup', keyReleased);
 gameButton.addEventListener('click', play);
 //pauseButton.addEventListener('click', game.pause());
 
 
 function destroyEvents() {
-    document.removeEventListener('keydown', keyDown);
-    document.removeEventListener('keyup', keyReleased);
     document.removeEventListener('click', play);
     //document.removeEventListener('click', pause);
-}
-
-function keyDown(ev: KeyboardEvent) {
-
-    keys[ev.key] = true;
-
-    if (keys['e']) {
-        game.hardDrop();
-    }
-
-    if (keys['s'] || keys['ArrowDown']) {
-        game.moveDown();
-    }
-
-    if (keys['a'] || keys['ArrowLeft']) {
-        game.moveLeft();
-    }
-
-    if (keys['d'] || keys['ArrowRight']) {
-        game.moveRight();
-    }
-
-    if (keys['w'] || keys['ArrowUp']) {
-        game.rotate();
-    }
-    game.updateMove();
-}
-
-function keyReleased(ev: KeyboardEvent) {
-    keys[ev.key] = false;
 }
 
 function play() {

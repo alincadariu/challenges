@@ -8,11 +8,53 @@ export class Game {
     private _tetrimino: Tetrimino | null;
     private _renderer: GameRenderer;
     private _seconds: number;
+    private keys: Record<string, boolean> = {};
 
     constructor(private _canvas: HTMLCanvasElement) {
         this.start();
         this._canvas.width = (CELL_SIZE * COLUMNS) - PADDING;
         this._canvas.height = (CELL_SIZE * ROWS) - PADDING;
+        this.attachEvents();
+    }
+
+    public attachEvents() {
+        document.addEventListener('keydown', this._keyDown);
+        document.addEventListener('keyup', this._keyReleased);
+    }
+
+    public destroyEvents() {
+        document.removeEventListener('keydown', this._keyDown);
+        document.removeEventListener('keyup', this._keyReleased);
+    }
+    private _keyReleased = (ev: KeyboardEvent) => {
+        this.keys[ev.key] = false;
+    }
+
+    private _keyDown = (ev: KeyboardEvent) => {
+
+        console.log(this.keys);
+        this.keys[ev.key] = true;
+
+        if (this.keys['e']) {
+            this.hardDrop();
+        }
+
+        if (this.keys['s'] || this.keys['ArrowDown']) {
+            this.moveDown();
+        }
+
+        if (this.keys['a'] || this.keys['ArrowLeft']) {
+            this.moveLeft();
+        }
+
+        if (this.keys['d'] || this.keys['ArrowRight']) {
+            this.moveRight();
+        }
+
+        if (this.keys['w'] || this.keys['ArrowUp']) {
+            this.rotate();
+        }
+        this.updateMove();
     }
 
     public get board() {
@@ -31,6 +73,7 @@ export class Game {
         document.getElementById("textTime").textContent = `Time: ${this._seconds}`;
         this.addTetrimino();
         this.draw();
+
 
     }
 
