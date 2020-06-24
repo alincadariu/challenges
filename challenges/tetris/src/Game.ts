@@ -70,7 +70,7 @@ export class Game {
         this._board = new GameBoard(ROWS, COLUMNS);
         this._renderer = new GameRenderer(this._canvas);
         this._seconds = 0;
-        document.getElementById("textTime").textContent = `Time: ${this._seconds}`;
+        document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
         this.addTetrimino();
         this.draw();
 
@@ -141,7 +141,7 @@ export class Game {
     public step() {
         this.moveDown();
         this._seconds++;
-        document.getElementById("textTime").textContent = `Time: ${this._seconds}`;
+        document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
         this.updateMove();
     }
 

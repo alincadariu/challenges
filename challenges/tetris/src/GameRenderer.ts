@@ -48,8 +48,12 @@ export class GameRenderer {
     }
 
     public drawGameOver() {
-        this._context.font = '35px Sans-serif';
-        this._context.fillStyle = 'black';
-        this._context.fillText('GAME OVER', 50, 50);
+        this._context.globalAlpha = 0.8;
+        this._context.fillStyle = '#FFF';
+        this._context.fillRect(0, 0, 10 * CELL_SIZE, 20 * CELL_SIZE);
+        this._context.globalAlpha = 1;
+        this._context.font = 'bold 35px Helvetica';
+        this._context.fillStyle = '#000000';
+        this._context.fillText('GAME OVER :(', 25, 200);
     }
 }

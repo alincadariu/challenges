@@ -8,7 +8,7 @@ export class GameBoard {
     constructor(private _height: number, private _width: number) {
         this.state = this.clearBoard();
         this._completedLines = 0;
-        document.getElementById("textLines").textContent = `Lines: ${this._completedLines}`;
+        document.getElementById("textLines").textContent = `LINES: ${this._completedLines}`;
     }
 
     public addCompletedLine() {
@@ -38,7 +38,7 @@ export class GameBoard {
                 this.state.unshift(Array(COLUMNS).fill(0));
             }
         });
-        document.getElementById("textLines").textContent = `Lines: ${this._completedLines}`;
+        document.getElementById("textLines").textContent = `LINES: ${this._completedLines}`;
     }
 
     public freeze(tetrimino: Tetrimino) {
