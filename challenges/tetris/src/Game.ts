@@ -8,7 +8,7 @@ export class Game {
     private _tetrimino: Tetrimino | null;
     private _renderer: GameRenderer;
     private _seconds: number;
-    private keys: Record<string, boolean> = {};
+    private _keys: Record<string, boolean> = {};
 
     constructor(private _canvas: HTMLCanvasElement) {
         this.start();
@@ -27,31 +27,31 @@ export class Game {
         document.removeEventListener('keyup', this._keyReleased);
     }
     private _keyReleased = (ev: KeyboardEvent) => {
-        this.keys[ev.key] = false;
+        this._keys[ev.key] = false;
     }
 
     private _keyDown = (ev: KeyboardEvent) => {
 
-        console.log(this.keys);
-        this.keys[ev.key] = true;
+        this._keys[ev.key] = true;
+        console.log(ev.key);
 
-        if (this.keys['e']) {
+        if (this._keys[' ']) {
             this.hardDrop();
         }
 
-        if (this.keys['s'] || this.keys['ArrowDown']) {
+        if (this._keys['s'] || this._keys['ArrowDown']) {
             this.moveDown();
         }
 
-        if (this.keys['a'] || this.keys['ArrowLeft']) {
+        if (this._keys['a'] || this._keys['ArrowLeft']) {
             this.moveLeft();
         }
 
-        if (this.keys['d'] || this.keys['ArrowRight']) {
+        if (this._keys['d'] || this._keys['ArrowRight']) {
             this.moveRight();
         }
 
-        if (this.keys['w'] || this.keys['ArrowUp']) {
+        if (this._keys['w'] || this._keys['ArrowUp']) {
             this.rotate();
         }
         this.updateMove();
