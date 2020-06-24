@@ -3,13 +3,13 @@ export const COLUMNS = 10;
 export const CELL_SIZE = 30;
 export const PADDING = 1;
 export const COLORS = [
-    'cyan',
-    'blue',
-    'orange',
-    '#ffd700',
-    'green',
-    'purple',
-    'red'
+    '#38C6F4', //cyan
+    '#0067DF', //blue
+    '#FA4616', //orange
+    '#FFB40E', //yellow
+    '#34DE69', //green
+    '#933692', //purple
+    '#ED145B'  //red
 ];
 export const TETRIMINOS = [
     [[1], [1], [1], [1]],
