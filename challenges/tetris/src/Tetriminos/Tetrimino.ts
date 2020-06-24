@@ -54,12 +54,7 @@ export class Tetrimino {
 
     public rotate() {
 
-        for (let y = 0; y < this.shape.length; ++y) {
-            for (let x = 0; x < y; ++x) {
-                [this._shape[x][y], this._shape[y][x]] = [this._shape[y][x], this._shape[x][y]];
-            }
-        }
-        //this.shape.forEach(row => row.reverse());
+        //TODO
     }
     public isAboveFloor() {
         return this._y + this._height < ROWS;
