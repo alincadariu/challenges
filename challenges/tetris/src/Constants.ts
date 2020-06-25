@@ -12,7 +12,7 @@ export const COLORS = [
     '#ED145B'  //red
 ];
 export const TETRIMINOS = [
-    [[1], [1], [1], [1]],
+    [[1, 1, 1, 1]],
 
     [[2, 0, 0],
     [2, 2, 2]],

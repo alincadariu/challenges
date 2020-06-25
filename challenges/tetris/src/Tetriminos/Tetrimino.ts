@@ -1,4 +1,5 @@
-import { TETRIMINOS, ROWS } from '../constants';
+import { TETRIMINOS, ROWS, COLUMNS } from '../constants';
+import { transform2Dinto1Darray } from '../utils/transform2dinto1darray';
 export class Tetrimino {
 
     private _shape: number[][];
@@ -54,8 +55,31 @@ export class Tetrimino {
 
     public rotate() {
 
-        //TODO
+        let newShape = Array.from({ length: this._width }, () => new Array());
+        const array1D = transform2Dinto1Darray(this._shape);
+
+        for (let x = 0; x < this._width; x++) {
+            for (let i = x; i < array1D.length; i += this._width) {
+                newShape[x].push(array1D[i]);
+            }
+        }
+        newShape.forEach(row => row.reverse());
+
+        const clone = this.clone();
+        clone._shape = newShape;
+        [this._width, this._height] = [this.height, this.width];
+
+        let overFlowingSquares = Math.max(0, (clone.x + clone.width) - COLUMNS);
+        console.log(overFlowingSquares);
+        while (overFlowingSquares !== 0) {
+            this.left();
+            overFlowingSquares--;
+        }
+
+        this._shape = newShape;
+
     }
+
     public isAboveFloor() {
         return this._y + this._height < ROWS;
     };

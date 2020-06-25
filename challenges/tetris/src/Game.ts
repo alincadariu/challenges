@@ -17,6 +17,10 @@ export class Game {
         this.attachEvents();
     }
 
+    public get board() {
+        return this._board;
+    }
+
     public attachEvents() {
         document.addEventListener('keydown', this._keyDown);
         document.addEventListener('keyup', this._keyReleased);
@@ -33,7 +37,6 @@ export class Game {
     private _keyDown = (ev: KeyboardEvent) => {
 
         this._keys[ev.key] = true;
-        console.log(ev.key);
 
         if (this._keys[' ']) {
             this.hardDrop();
@@ -57,14 +60,6 @@ export class Game {
         this.updateMove();
     }
 
-    public get board() {
-        return this._board;
-    }
-
-    public get tetrimino() {
-        return this._tetrimino;
-    }
-
     public start() {
 
         this._board = new GameBoard(ROWS, COLUMNS);
@@ -73,8 +68,6 @@ export class Game {
         document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
         this.addTetrimino();
         this.draw();
-
-
     }
 
     public addTetrimino() {
@@ -85,37 +78,34 @@ export class Game {
         if (!this._tetrimino.canMoveRight(this._board)) {
             return;
         }
-        this.tetrimino.right();
+        this._tetrimino.right();
     }
 
     public moveLeft() {
         if (!this._tetrimino.canMoveLeft(this._board)) {
             return;
         }
-        this.tetrimino.left();
+        this._tetrimino.left();
     }
 
     public moveDown() {
-        this.tetrimino.down();
+        this._tetrimino.down();
     }
 
     public rotate() {
-        this.tetrimino.rotate();
+        this._tetrimino.rotate();
     }
 
     public isValidPos() {
         let isValid = true;
-        this.tetrimino.shape.forEach((row, rowIndex) => {
-            row.forEach((value, colIndex) => {
-                const y = this.tetrimino.y + rowIndex;
-                const x = this.tetrimino.x + colIndex;
+        this._tetrimino.shape.forEach((row, rowIndex) => {
+            return row.forEach((value, colIndex) => {
+                const y = this._tetrimino.y + rowIndex;
+                const x = this._tetrimino.x + colIndex;
 
-                const lineBelow = this.board.state[y + 1];
-
-                //  if (!lineBelow) { return isValid = false; }
+                const lineBelow = this._board.state[y + 1];
 
                 if (value !== 0 && lineBelow[x] !== 0) { return isValid = false; }
-
             });
         });
         return isValid;
@@ -124,7 +114,7 @@ export class Game {
     public updateMove() {
 
         if (!this._tetrimino.isAboveFloor() || !this.isValidPos()) {
-            this._board.freeze(this.tetrimino);
+            this._board.freeze(this._tetrimino);
             this._board.checkCompletedLines();
             this.addTetrimino();
         }
@@ -150,8 +140,8 @@ export class Game {
     }
 
     public draw() {
-        this._renderer.updateTetrimino(this.tetrimino);
-        this._renderer.drawBoard(this.board);
+        this._renderer.updateTetrimino(this._tetrimino);
+        this._renderer.drawBoard(this._board);
     }
 
 }
