@@ -31,30 +31,30 @@ export class Game {
         document.removeEventListener('keyup', this._keyReleased);
     }
     private _keyReleased = (ev: KeyboardEvent) => {
-        this._keys[ev.key] = false;
+        this._keys[ev.code] = false;
     }
 
     private _keyDown = (ev: KeyboardEvent) => {
 
-        this._keys[ev.key] = true;
+        this._keys[ev.code] = true;
 
-        if (this._keys[' ']) {
+        if (this._keys['Space']) {
             this.hardDrop();
         }
 
-        if (this._keys['s'] || this._keys['ArrowDown']) {
+        if (this._keys['KeyS'] || this._keys['ArrowDown']) {
             this.moveDown();
         }
 
-        if (this._keys['a'] || this._keys['ArrowLeft']) {
+        if (this._keys['KeyA'] || this._keys['ArrowLeft']) {
             this.moveLeft();
         }
 
-        if (this._keys['d'] || this._keys['ArrowRight']) {
+        if (this._keys['KeyD'] || this._keys['ArrowRight']) {
             this.moveRight();
         }
 
-        if (this._keys['w'] || this._keys['ArrowUp']) {
+        if (this._keys['KeyW'] || this._keys['ArrowUp']) {
             this.rotate();
         }
         this.updateMove();

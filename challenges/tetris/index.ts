@@ -5,19 +5,28 @@ const pauseButton = document.getElementById('pauseButton');
 const canvas = document.createElement('canvas');
 const canvasDiv = document.getElementById('canvas');
 const game = new Game(canvas);
-const keys: string[] = new Array();
 canvasDiv.append(canvas);
 
 let requestId: number;
 let start: number;
 
 gameButton.addEventListener('click', play);
-//pauseButton.addEventListener('click', game.pause());
+
+pauseButton.addEventListener('click', () => {
+    if (!requestId) {
+        document.getElementById("pauseButton").textContent = `Pause`;
+        animate();
+        return;
+    }
+    document.getElementById("pauseButton").textContent = `Resume`;
+    cancelAnimationFrame(requestId);
+    requestId = null;
+});
 
 
 function destroyEvents() {
     document.removeEventListener('click', play);
-    //document.removeEventListener('click', pause);
+    //document.removeEventListener('click', ;
 }
 
 function play() {
