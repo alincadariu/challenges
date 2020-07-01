@@ -1,3 +1,7 @@
+body, html {
+    font-family: sans-serif;
+}
+
 body {
     display: grid;
     grid-template-columns: 50% 50%;
@@ -15,7 +19,6 @@ canvas {
     font-weight: 500;
     width: 122px;
     text-decoration:none;
-    font-family: Helvetica;
     color:#FFF;
     text-align:center;
     background-color: #FA4616;
@@ -25,7 +28,6 @@ canvas {
 }
 
 #textTime, #textLines {
-    font-family: Helvetica;
     font-weight: 600;
     font-size: 15px;
     color: #FFF;
@@ -37,7 +39,6 @@ canvas {
 }
 
 #textTetris {
-    font-family: Helvetica;
     font-weight: 700;
     font-size: 40px;
     letter-spacing: 1px;
@@ -48,7 +49,6 @@ canvas {
 #controls {
     margin: auto;
     width: 250px;
-    
 }
 
 img {

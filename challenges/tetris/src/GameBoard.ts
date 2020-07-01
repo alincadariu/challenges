@@ -25,7 +25,7 @@ export class GameBoard {
 
     public get isGameOver() {
         return this.state[0].some(element => {
-            return element !== 0
+            return element !== 0;
         });
     }
 

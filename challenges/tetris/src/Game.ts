@@ -68,7 +68,7 @@ export class Game {
         document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
         document.getElementById("pauseButton").textContent = `Pause`;
         this.addTetrimino();
-        this.draw();
+        this._draw();
     }
 
     public addTetrimino() {
@@ -119,7 +119,7 @@ export class Game {
             this._board.checkCompletedLines();
             this.addTetrimino();
         }
-        this.draw();
+        this._draw();
     }
 
     public hardDrop() {
@@ -134,13 +134,14 @@ export class Game {
         this._seconds++;
         document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
         this.updateMove();
+        this._draw();
     }
 
     public drawGameOver() {
         this._renderer.drawGameOver();
     }
 
-    public draw() {
+    private _draw() {
         this._renderer.updateTetrimino(this._tetrimino);
         this._renderer.drawBoard(this._board);
     }

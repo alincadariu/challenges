@@ -37,8 +37,8 @@ function animate() {
     let elapsed = performance.now() - start;
 
     if (game.board.isGameOver) {
-        game.drawGameOver();
         cancelAnimationFrame(requestId);
+        game.drawGameOver();
         game.destroyEvents();
         return;
     }
@@ -47,7 +47,7 @@ function animate() {
         start = performance.now();
         game.step();
     }
-    game.draw();
+
     requestId = requestAnimationFrame(animate);
 }
 play();

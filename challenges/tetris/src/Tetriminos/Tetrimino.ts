@@ -1,5 +1,5 @@
 import { TETRIMINOS, ROWS, COLUMNS } from '../constants';
-import { transform2Dinto1Darray } from '../utils/transform2dinto1darray';
+
 export class Tetrimino {
 
     private _shape: number[][];
@@ -56,11 +56,11 @@ export class Tetrimino {
     public rotate() {
 
         let newShape = Array.from({ length: this._width }, () => new Array());
-        const array1D = transform2Dinto1Darray(this._shape);
+        const flattened = this._shape.flat();
 
         for (let x = 0; x < this._width; x++) {
-            for (let i = x; i < array1D.length; i += this._width) {
-                newShape[x].push(array1D[i]);
+            for (let i = x; i < flattened.length; i += this._width) {
+                newShape[x].push(flattened[i]);
             }
         }
         newShape.forEach(row => row.reverse());
