@@ -9,6 +9,7 @@ export class Game {
     private _renderer: GameRenderer;
     private _seconds: number;
     private _keys: Record<string, boolean> = {};
+    private _isGameOver: boolean;
 
     constructor(private _canvas: HTMLCanvasElement) {
         this.start();
@@ -61,14 +62,14 @@ export class Game {
     }
 
     public start() {
-
+        this._isGameOver = false;
         this._board = new GameBoard(ROWS, COLUMNS);
         this._renderer = new GameRenderer(this._canvas);
         this._seconds = 0;
         document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
         document.getElementById("pauseButton").textContent = `Pause`;
         this.addTetrimino();
-        this._draw();
+        this.draw();
     }
 
     public addTetrimino() {
@@ -111,15 +112,23 @@ export class Game {
         });
         return isValid;
     }
+    public get isGameOver() {
+        return this._isGameOver;
+    }
 
     public updateMove() {
 
         if (!this._tetrimino.isAboveFloor() || !this.isValidPos()) {
             this._board.freeze(this._tetrimino);
             this._board.checkCompletedLines();
-            this.addTetrimino();
+            if (this._tetrimino.y === 0) {
+                this._isGameOver = true;
+            }
+            else {
+                this.addTetrimino();
+            }
         }
-        this._draw();
+        this.draw();
     }
 
     public hardDrop() {
@@ -131,17 +140,16 @@ export class Game {
 
     public step() {
         this.moveDown();
+        this.updateMove();
         this._seconds++;
         document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
-        this.updateMove();
-        this._draw();
     }
 
     public drawGameOver() {
         this._renderer.drawGameOver();
     }
 
-    private _draw() {
+    public draw() {
         this._renderer.updateTetrimino(this._tetrimino);
         this._renderer.drawBoard(this._board);
     }

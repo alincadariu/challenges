@@ -23,13 +23,6 @@ export class GameBoard {
         }).fill(0));
     }
 
-    public get isGameOver() {
-        return this.state[0].some(element => {
-            return element !== 0;
-        });
-    }
-
-
     public checkCompletedLines() {
         this.state.forEach((row, rowIndex) => {
             if (row.every(value => value > 0)) {

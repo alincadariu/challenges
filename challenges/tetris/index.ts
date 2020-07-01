@@ -1,4 +1,5 @@
 import { Game } from './src/Game';
+import { fdatasync } from 'fs';
 
 const gameButton = document.getElementById('gameButton');
 const pauseButton = document.getElementById('pauseButton');
@@ -36,7 +37,9 @@ function play() {
 function animate() {
     let elapsed = performance.now() - start;
 
-    if (game.board.isGameOver) {
+    game.updateMove();
+
+    if (game.isGameOver) {
         cancelAnimationFrame(requestId);
         game.drawGameOver();
         game.destroyEvents();
