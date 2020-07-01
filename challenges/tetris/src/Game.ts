@@ -66,6 +66,7 @@ export class Game {
         this._renderer = new GameRenderer(this._canvas);
         this._seconds = 0;
         document.getElementById("textTime").textContent = `TIME: ${this._seconds}`;
+        document.getElementById("pauseButton").textContent = `Pause`;
         this.addTetrimino();
         this.draw();
     }

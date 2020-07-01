@@ -2,17 +2,17 @@ import { Game } from './src/Game';
 
 const gameButton = document.getElementById('gameButton');
 const pauseButton = document.getElementById('pauseButton');
-const canvas = document.createElement('canvas');
-const canvasDiv = document.getElementById('canvas');
-const game = new Game(canvas);
-canvasDiv.append(canvas);
+const canvas = document.getElementById('canvas');
+const game = new Game(canvas as HTMLCanvasElement);
+document.body.append(canvas);
 
 let requestId: number;
 let start: number;
 
 gameButton.addEventListener('click', play);
+pauseButton.addEventListener('click', pause);
 
-pauseButton.addEventListener('click', () => {
+function pause() {
     if (!requestId) {
         document.getElementById("pauseButton").textContent = `Pause`;
         animate();
@@ -21,12 +21,7 @@ pauseButton.addEventListener('click', () => {
     document.getElementById("pauseButton").textContent = `Resume`;
     cancelAnimationFrame(requestId);
     requestId = null;
-});
 
-
-function destroyEvents() {
-    document.removeEventListener('click', play);
-    //document.removeEventListener('click', ;
 }
 
 function play() {
@@ -44,7 +39,7 @@ function animate() {
     if (game.board.isGameOver) {
         game.drawGameOver();
         cancelAnimationFrame(requestId);
-        destroyEvents();
+        game.destroyEvents();
         return;
     }
 

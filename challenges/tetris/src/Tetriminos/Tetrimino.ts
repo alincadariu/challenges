@@ -70,7 +70,6 @@ export class Tetrimino {
         [this._width, this._height] = [this.height, this.width];
 
         let overFlowingSquares = Math.max(0, (clone.x + clone.width) - COLUMNS);
-        console.log(overFlowingSquares);
         while (overFlowingSquares !== 0) {
             this.left();
             overFlowingSquares--;
