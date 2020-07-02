@@ -27,6 +27,10 @@ canvas {
     border:none;
 }
 
+#gameButton:focus, #pauseButton:focus {
+    outline:none;
+}
+
 #textTime, #textLines {
     font-weight: 600;
     font-size: 15px;

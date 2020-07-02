@@ -1,5 +1,4 @@
 import { Game } from './src/Game';
-import { fdatasync } from 'fs';
 
 const gameButton = document.getElementById('gameButton');
 const pauseButton = document.getElementById('pauseButton');
@@ -15,11 +14,13 @@ pauseButton.addEventListener('click', pause);
 
 function pause() {
     if (!requestId) {
+        game.attachEvents();
         document.getElementById("pauseButton").textContent = `Pause`;
         animate();
         return;
     }
     document.getElementById("pauseButton").textContent = `Resume`;
+    game.destroyEvents();
     cancelAnimationFrame(requestId);
     requestId = null;
 
@@ -37,8 +38,6 @@ function play() {
 function animate() {
     let elapsed = performance.now() - start;
 
-    game.updateMove();
-
     if (game.isGameOver) {
         cancelAnimationFrame(requestId);
         game.drawGameOver();
@@ -50,6 +49,7 @@ function animate() {
         start = performance.now();
         game.step();
     }
+    game.updateMove();
 
     requestId = requestAnimationFrame(animate);
 }

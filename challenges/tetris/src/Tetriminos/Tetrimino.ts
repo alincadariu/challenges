@@ -53,7 +53,7 @@ export class Tetrimino {
         this._y += 1;
     }
 
-    public rotate() {
+    public rotated() {
 
         let newShape = Array.from({ length: this._width }, () => new Array());
         const flattened = this._shape.flat();
