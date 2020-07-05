@@ -98,6 +98,12 @@ export class Game {
 
     private _rotate() {
         this._tetrimino.rotated();
+        if (!this._isValidPos()) {
+            this._tetrimino.rotated();
+        }
+        while (!this._isValidPos()) {
+            this._tetrimino.right();
+        }
     }
 
     private _hardDrop() {
