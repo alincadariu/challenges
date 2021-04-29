@@ -1,0 +1,60 @@
+body, html {
+    font-family: sans-serif;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+canvas {
+    border: 1px solid;
+    border-radius: 3px;
+    border-color: #000000;
+}
+
+#gameButton, #pauseButton{
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 500;
+    width: 122px;
+    text-decoration:none;
+    color:#FFF;
+    text-align:center;
+    background-color: #FA4616;
+    font-size: 15px;
+    border-color: #FFF;
+    border:none;
+}
+
+#gameButton:focus, #pauseButton:focus {
+    outline:none;
+}
+
+#textTime, #textLines {
+    font-weight: 600;
+    font-size: 15px;
+    color: #FFF;
+    letter-spacing: 1px;
+    background-color:#0067DF;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#textTetris {
+    font-weight: 700;
+    font-size: 40px;
+    letter-spacing: 1px;
+    color: #FA4616;
+    margin-bottom: 0px;
+}
+
+#controls {
+    margin: auto;
+    width: 250px;
+}
+
+img {
+    width: 200px;
+}

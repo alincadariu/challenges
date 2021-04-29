@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "strict": false,
+        "target": "ES6",
+        "lib": [
+            "ES2019",
+            "DOM"
+        ]
+    }
+}
